@@ -1,7 +1,7 @@
 {
-  "Group": "HytaleHeroes",
-  "Name": "HeroBase",
-  "Version": "1.0.0",
+  "Group": "${group}",
+  "Name": "${name}",
+  "Version": "${version}",
   "Description": "A base mod",
   "Authors": [
     {

@@ -1,5 +1,6 @@
 package gg.hytaleheroes.herobase;
 
+import com.hypixel.hytale.server.core.event.events.ShutdownEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -29,13 +30,16 @@ public class HeroBase extends JavaPlugin {
 
         this.getCommandRegistry().registerCommand(new BaseCommand());
 
+        this.getEventRegistry().register(ShutdownEvent.class, (event) -> {
+            TRACKER.syncSave();
+        });
+
         this.getEventRegistry().register(PlayerConnectEvent.class, (event) -> {
             boolean isNewPlayer = TRACKER.add(event.getPlayerRef().getUuid());
             if (isNewPlayer) {
                 for (String s : CONFIG.get().welcomeMessage) {
                     event.getPlayerRef().sendMessage(TinyMsg.parse(s.replace("%player%", event.getPlayerRef().getUsername())));
                 }
-                TRACKER.syncSave();
             } else {
                 for (String s : CONFIG.get().welcomeBackMessage) {
                     event.getPlayerRef().sendMessage(TinyMsg.parse(s.replace("%player%", event.getPlayerRef().getUsername())));
