@@ -1,48 +1,57 @@
 package gg.hytaleheroes.herobase;
 
-import com.hypixel.hytale.server.core.command.system.CommandRegistry;
+import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.util.Config;
 import gg.hytaleheroes.herobase.command.BaseCommand;
 import gg.hytaleheroes.herobase.config.ModConfig;
+import gg.hytaleheroes.herobase.file.PlayerFirstJoinTrackerFile;
+import gg.hytaleheroes.herobase.format.TinyMsg;
 
 import javax.annotation.Nonnull;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class HeroBase extends JavaPlugin {
-    public static final ExecutorService PHYSICS = Executors.newSingleThreadExecutor();
-    public static final ExecutorService COLLISION_GEN = Executors.newVirtualThreadPerTaskExecutor();
-
-    public static HeroBase INSTANCE;
     public static Config<ModConfig> CONFIG;
+    public static PlayerFirstJoinTrackerFile TRACKER = new PlayerFirstJoinTrackerFile();
 
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
-        INSTANCE = this;
-        this.withConfig("", ModConfig.CODEC);
+        CONFIG = this.withConfig("HeroBase", ModConfig.CODEC);
+        CONFIG.load();
+        TRACKER.syncLoad();
     }
 
     @Override
-    public void setup() {
+    protected void setup() {
+        super.setup();
 
-        //this.getEntityStoreRegistry().registerSystem(new BreakBlockEventSystem());
-        //this.getEntityStoreRegistry().registerSystem(new PlaceBlockEventSystem());
-        //this.getEntityStoreRegistry().registerSystem(new InteractEventSystem());
-        //this.getEntityStoreRegistry().registerSystem(new PickupInteractEventSystem());
-        //this.getEntityStoreRegistry().registerSystem(new TitleTickingSystem());
-        //this.getEntityStoreRegistry().registerSystem(new CustomDamageEventSystem());
-        //this.getChunkStoreRegistry().registerSystem(new WorldMapUpdateTickingSystem());
+        this.getCommandRegistry().registerCommand(new BaseCommand());
 
-        CommandRegistry commandRegistry = this.getCommandRegistry();
-        commandRegistry.registerCommand(new BaseCommand());
+        this.getEventRegistry().register(PlayerConnectEvent.class, (event) -> {
+            boolean isNewPlayer = TRACKER.add(event.getPlayerRef().getUuid());
+            if (isNewPlayer) {
+                for (String s : CONFIG.get().welcomeMessage) {
+                    event.getPlayerRef().sendMessage(TinyMsg.parse(s.replace("%player%", event.getPlayerRef().getUsername())));
+                }
+                TRACKER.syncSave();
+            } else {
+                for (String s : CONFIG.get().welcomeBackMessage) {
+                    event.getPlayerRef().sendMessage(TinyMsg.parse(s.replace("%player%", event.getPlayerRef().getUsername())));
+                }
+            }
 
+            var msg = isNewPlayer ? CONFIG.get().globalWelcomeMessage : CONFIG.get().globalWelcomeBackMessage;
+            if (msg != null && !msg.isBlank()) {
+                var playerRefList = Universe.get().getPlayers();
+                playerRefList.forEach(x -> {
+                    if (x != null && event.getPlayerRef() != x)
+                        x.sendMessage(TinyMsg.parse(msg.replace("%player%", event.getPlayerRef().getUsername())));
+                });
+            }
+        });
     }
 
-    @Override
-    protected void start() {
-        super.start();
 
-    }
 }
