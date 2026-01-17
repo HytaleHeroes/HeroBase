@@ -21,7 +21,7 @@ public class HeroBase extends JavaPlugin {
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
         CONFIG = this.withConfig("HeroBase", ModConfig.CODEC);
-        CONFIG.load();
+        CONFIG.load().thenAccept(x -> CONFIG.save());
         TRACKER.syncLoad();
     }
 
