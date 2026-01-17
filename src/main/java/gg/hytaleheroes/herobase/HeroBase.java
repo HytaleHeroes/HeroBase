@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.world.events.ecs.ChunkSaveEvent;
 import com.hypixel.hytale.server.core.util.Config;
 import gg.hytaleheroes.herobase.command.BaseCommand;
 import gg.hytaleheroes.herobase.config.ModConfig;
@@ -33,6 +34,9 @@ public class HeroBase extends JavaPlugin {
         this.getEventRegistry().register(ShutdownEvent.class, (event) -> {
             TRACKER.syncSave();
         });
+        this.getEventRegistry().register(ChunkSaveEvent.class, (event) -> {
+            TRACKER.syncSave();
+        });
 
         this.getEventRegistry().register(PlayerConnectEvent.class, (event) -> {
             boolean isNewPlayer = TRACKER.add(event.getPlayerRef().getUuid());
@@ -57,5 +61,10 @@ public class HeroBase extends JavaPlugin {
         });
     }
 
+    @Override
+    protected void shutdown() {
+        super.shutdown();
 
+        TRACKER.syncSave();
+    }
 }
