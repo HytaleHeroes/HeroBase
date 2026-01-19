@@ -15,19 +15,20 @@ import gg.hytaleheroes.herobase.format.TinyMsg;
 import javax.annotation.Nonnull;
 
 public class HeroBase extends JavaPlugin {
-    public static Config<ModConfig> CONFIG;
+    private final Config<ModConfig> config;
     public static PlayerFirstJoinTrackerFile TRACKER = new PlayerFirstJoinTrackerFile();
 
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
-        CONFIG = this.withConfig("HeroBase", ModConfig.CODEC);
-        CONFIG.load().thenAccept(x -> CONFIG.save());
-        TRACKER.syncLoad();
+        this.config = this.withConfig("HeroBase", ModConfig.CODEC);
     }
 
     @Override
     protected void setup() {
         super.setup();
+
+        this.config.load().thenAccept(x -> config.save()).join();
+        TRACKER.syncLoad();
 
         this.getCommandRegistry().registerCommand(new BaseCommand());
 
@@ -41,16 +42,16 @@ public class HeroBase extends JavaPlugin {
         this.getEventRegistry().register(PlayerConnectEvent.class, (event) -> {
             boolean isNewPlayer = TRACKER.add(event.getPlayerRef().getUuid());
             if (isNewPlayer) {
-                for (String s : CONFIG.get().welcomeMessage) {
+                for (String s : config.get().welcomeMessage) {
                     event.getPlayerRef().sendMessage(TinyMsg.parse(s.replace("%player%", event.getPlayerRef().getUsername())));
                 }
             } else {
-                for (String s : CONFIG.get().welcomeBackMessage) {
+                for (String s : config.get().welcomeBackMessage) {
                     event.getPlayerRef().sendMessage(TinyMsg.parse(s.replace("%player%", event.getPlayerRef().getUsername())));
                 }
             }
 
-            var msg = isNewPlayer ? CONFIG.get().globalWelcomeMessage : CONFIG.get().globalWelcomeBackMessage;
+            var msg = isNewPlayer ? config.get().globalWelcomeMessage : config.get().globalWelcomeBackMessage;
             if (msg != null && !msg.isBlank()) {
                 var playerRefList = Universe.get().getPlayers();
                 playerRefList.forEach(x -> {

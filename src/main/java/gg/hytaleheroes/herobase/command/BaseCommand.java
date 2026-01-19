@@ -14,7 +14,8 @@ import javax.annotation.Nonnull;
 
 public class BaseCommand extends AbstractPlayerCommand { // checkout the other base command classes too
     public BaseCommand() {
-        super("herobase", "hytaleheroes.commands.mymodcommand.desc");
+        super("herobase", "herobase.commands.herobase.desc");
+        this.requirePermission("herobase.herobase");
         this.setPermissionGroup(GameMode.Creative);
         this.addAliases("hb");
         this.addSubCommand(new ReloadCommand());
