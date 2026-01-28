@@ -15,6 +15,8 @@ import java.io.IOException;
 public class HeroBase extends JavaPlugin {
     private final Config<ModConfig> config;
 
+    public static HeroBase INSTANCE;
+
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
         this.config = this.withConfig("HeroBase", ModConfig.CODEC);
@@ -23,6 +25,8 @@ public class HeroBase extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
+
+        INSTANCE = this;
 
         this.config.load().thenAccept(x -> config.save()).join();
 
@@ -55,5 +59,9 @@ public class HeroBase extends JavaPlugin {
                 });
             }
         });
+    }
+
+    public Config<ModConfig> getConfig() {
+        return config;
     }
 }
