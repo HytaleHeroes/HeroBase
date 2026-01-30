@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+    <g fill="none" stroke="black" stroke-width="40" stroke-linecap="butt" shape-rendering="geometricPrecision">
+        <circle cx="100" cy="100" r="70" stroke-dasharray="85.9646 2" transform="rotate(-90 100 100)"/>
+        <circle
+                cx="100" cy="100" r="70"
+                fill="none" stroke="red" stroke-width="40"
+                stroke-dasharray="85.9646 439.8228"
+                stroke-dashoffset="-263.8"
+                transform="rotate(-90 100 100)"
+        />
+    </g>
+</svg>
+

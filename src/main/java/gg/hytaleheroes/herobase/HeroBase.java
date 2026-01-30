@@ -1,13 +1,23 @@
 package gg.hytaleheroes.herobase;
 
+import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.HytaleServer;
+import com.hypixel.hytale.server.core.entity.InteractionContext;
+import com.hypixel.hytale.server.core.entity.InteractionManager;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
+import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
+import com.hypixel.hytale.server.core.modules.item.ItemModule;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.plugin.registry.AssetRegistry;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.util.Config;
 import gg.hytaleheroes.herobase.command.BaseCommand;
 import gg.hytaleheroes.herobase.config.ModConfig;
 import gg.hytaleheroes.herobase.format.TinyMsg;
+import gg.hytaleheroes.herobase.system.AbilityKeybindSystem;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -28,7 +38,7 @@ public class HeroBase extends JavaPlugin {
 
         INSTANCE = this;
 
-        this.config.load().thenAccept(x -> config.save()).join();
+        this.config.get();
 
         this.getCommandRegistry().registerCommand(new BaseCommand());
 
@@ -59,7 +69,19 @@ public class HeroBase extends JavaPlugin {
                 });
             }
         });
+
     }
+
+    @Override
+    protected void start() {
+        super.start();
+
+        this.getEntityStoreRegistry().registerSystem(new AbilityKeybindSystem());
+
+        SimpleBlockInteraction.CODEC
+    }
+
+
 
     public Config<ModConfig> getConfig() {
         return config;

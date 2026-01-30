@@ -1,0 +1,18 @@
+$Common = "Common.ui";
+
+Group #Root {
+  LayoutMode: Center;
+  Anchor: (Width: 512, Height: 512, Right: 10, Bottom: 30);
+
+  Group #Wheel {
+    Anchor: (Width: 512, Height: 512);
+    Background: PatchStyle(TexturePath: "wheel.png");
+    LayoutMode: Top;
+    Label #AbilityLabel {
+      Style: (FontSize: 32, Alignment: Center, VerticalAlignment: Center);
+      Anchor: (Width: 512, Height: 512);
+      Text: "";
+      Padding: (Full: 10);
+    }
+  }
+}
