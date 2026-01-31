@@ -10,7 +10,9 @@
   ],
   "Website": "hytaleheroes.gg",
   "ServerVersion": ">1",
-  "Dependencies": {},
+  "Dependencies": {
+    "Hytale:NPC": "*"
+  },
   "OptionalDependencies": {},
   "DisabledByDefault": false,
   "Main": "${entry_point}",
