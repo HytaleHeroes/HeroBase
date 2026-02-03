@@ -29,6 +29,9 @@ public class PlayerPvpEvents extends DamageEventSystem {
     }
 
     public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull Damage damage) {
+        var conf = HeroBase.get().getPvpConfig().get().pvpConfigEntryMap.get(commandBuffer.getExternalData().getWorld().getName());
+        if (conf == null) return;
+
         boolean isDead = archetypeChunk.getArchetype().contains(DeathComponent.getComponentType());
         var playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
         if (isDead && playerRef != null && !(damage.getAmount() <= 0.0F)) {
@@ -39,7 +42,7 @@ public class PlayerPvpEvents extends DamageEventSystem {
                     PlayerRef sourcePlayerRef = commandBuffer.getComponent(sourceRef, PlayerRef.getComponentType());
                     if (sourcePlayerRef != null && sourcePlayerRef.isValid()) {
                         try {
-                            HeroBase.get().getLeaderboards().recordKill(sourcePlayerRef.getUuid(), playerRef.getUuid(), "ffa");
+                            HeroBase.get().getLeaderboards().recordKill(sourcePlayerRef.getUuid(), playerRef.getUuid(), conf.mode);
                         } catch (SQLException e) {
                             HytaleLogger.forEnclosingClass().at(Level.SEVERE).log("Error while recording kill", e);
                         }

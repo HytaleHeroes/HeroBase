@@ -18,7 +18,7 @@ public class ReloadCommand extends AbstractAsyncCommand {
     @Nonnull
     @Override
     protected CompletableFuture<Void> executeAsync(@Nonnull CommandContext commandContext) {
-        HeroBase.INSTANCE.getConfig().load();
+        HeroBase.INSTANCE.reload();
         return CompletableFuture.completedFuture(null);
     }
 }

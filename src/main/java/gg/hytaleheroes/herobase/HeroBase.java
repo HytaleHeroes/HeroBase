@@ -83,6 +83,7 @@ public class HeroBase extends JavaPlugin {
 
         this.config.save();
         this.dbConfig.save();
+        this.pvpConfig.save();
 
         var dbCfg = this.dbConfig.get();
 
@@ -193,5 +194,11 @@ public class HeroBase extends JavaPlugin {
 
     public Config<PvpConfig> getPvpConfig() {
         return pvpConfig;
+    }
+
+    public void reload() {
+        config.load();
+        dbConfig.load();
+        pvpConfig.load();
     }
 }
