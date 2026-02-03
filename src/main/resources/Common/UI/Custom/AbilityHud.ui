@@ -2,17 +2,27 @@ $Common = "Common.ui";
 
 Group #Root {
   LayoutMode: Center;
-  Anchor: (Width: 512, Height: 512, Right: 10, Bottom: 30);
+  Anchor: (Width: 700, Height: 200, Bottom: 10);
 
-  Group #Wheel {
-    Anchor: (Width: 512, Height: 512);
-    Background: PatchStyle(TexturePath: "wheel.png");
+  Group #Root {
+    Anchor: (Width: 700, Height: 200);
     LayoutMode: Top;
     Label #AbilityLabel {
-      Style: (FontSize: 32, Alignment: Center, VerticalAlignment: Center);
-      Anchor: (Width: 512, Height: 512);
-      Text: "";
+      Style: (FontSize: 32, Alignment: Center, VerticalAlignment: Start);
+      Anchor: (Width: 700, Height: 70);
+      Text: "Hello";
+
       Padding: (Full: 10);
+    }
+
+    Group {
+      Anchor: (Height: 40);
+    }
+
+    Group #Bar {
+      LayoutMode: Center;
+      Anchor: (Width: 700, Height: 50, Bottom: 1);
+
     }
   }
 }

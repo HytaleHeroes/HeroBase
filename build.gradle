@@ -29,8 +29,6 @@ dependencies {
     //compileOnly("curse.maven:simpleclaims-1405415:7540330") // 1.0.25
     implementation("curse.maven:multiplehud-1423634:7530266") // 1.0.4
 
-    implementation(":AccessoriesPlugin-1.2.0")
-
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

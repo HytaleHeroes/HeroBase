@@ -10,21 +10,27 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.protocol.packets.interface_.HudComponent;
+import com.hypixel.hytale.protocol.packets.inventory.SetActiveSlot;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.InteractionManager;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
+import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.Ability;
+import gg.hytaleheroes.herobase.HeroBase;
 import gg.hytaleheroes.herobase.gui.hud.AbilityHud;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,15 +39,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
     private static final String HUD_KEY = "HeroAbilities";
 
-    private Map<String, String> abilities = Map.of(
-            "Dash", "Dash_Skill",
-            "Cast", "Staff_Cast_Summon_Charged",
-            "Stoneskin", "Stoneskin_Cast",
-            "Bomb Throw", "Skeleton_Burnt_Alchemist_Bomb_Throw",
-            "Boomshot", "Bow_Bomb_Boomshot"
+    private final List<Ability> abilities = List.of(
+            new Ability("Dash_Skill", "Dash", "beam-acid-2.png", ("Dash_Skill")),
+            new Ability("Staff_Cast_Summon_Charged", "Cast", "enchant-acid-2.png", ("Staff_Cast_Summon_Charged")),
+            new Ability("Stoneskin_Cast", "Stoneskin", "explosion-magenta-2.png", ("Stoneskin_Cast")),
+            new Ability("Skeleton_Burnt_Alchemist_Bomb_Throw", "Bomb Throw", "haste-sky-2.png", ("Skeleton_Burnt_Alchemist_Bomb_Throw")),
+            new Ability("Bow_Bomb_Boomshot", "Boomshot", "horror-acid-2.png", ("Bow_Bomb_Boomshot"))
     );
 
-    private ConcurrentHashMap<UUID, AbilityHud> activeHuds = new ConcurrentHashMap<>();
 
     public void tick(float dt, int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         MovementStatesComponent statesComponent = archetypeChunk.getComponent(index, MovementStatesComponent.getComponentType());
@@ -49,61 +54,29 @@ public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
         PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
         HeadRotation headRotation = archetypeChunk.getComponent(index, HeadRotation.getComponentType());
         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
+
+        var huds = HeroBase.get().activeHuds();
+
         if (transform != null && headRotation != null && player != null && statesComponent != null && playerRef != null && playerRef.isValid()) {
             MovementStates movementStates = statesComponent.getMovementStates();
 
-
-
-            AbilityHud currentHud = activeHuds.get(playerRef.getUuid());
+            AbilityHud currentHud = huds.get(playerRef.getUuid());
             boolean hasHud = currentHud != null;
 
             if (movementStates.walking && !hasHud) {
                 player.getHudManager().hideHudComponents(playerRef, HudComponent.Hotbar);
-                var hud = new AbilityHud(playerRef, headRotation.getDirection().normalize(), abilities);
+                var hud = new AbilityHud(playerRef, abilities, player.getInventory().getActiveHotbarSlot());
                 MultipleHUD.getInstance().setCustomHud(player, playerRef, HUD_KEY, hud);
-                activeHuds.put(playerRef.getUuid(), hud);
+                huds.put(playerRef.getUuid(), hud);
+                AbilityHud.resetSlot(playerRef, player);
+
             } else if (!movementStates.walking && hasHud) {
+                player.getHudManager().showHudComponents(playerRef, HudComponent.Hotbar);
                 MultipleHUD.getInstance().hideCustomHud(player, HUD_KEY);
-                var old = activeHuds.remove(playerRef.getUuid());
+                var old = huds.remove(playerRef.getUuid());
                 if (old != null) {
-
-                    player.getHudManager().showHudComponents(playerRef, HudComponent.Hotbar);
-                    player.getHudManager().showHudComponents(playerRef, HudComponent.Speedometer);
-                    player.getHudManager().showHudComponents(playerRef, HudComponent.PlayerList);
-
-                    player.getHotbarManager().getCurrentHotbarIndex();
-
-                    ComponentType<EntityStore, InteractionManager> managerType = InteractionModule.get().getInteractionManagerComponent();
-
-                    InteractionManager manager = archetypeChunk.getComponent(index, managerType);
-                    String interaction = old.selectedInteraction();
-                    if (manager != null && interaction != null) {
-                        var root = RootInteraction.getAssetStore().getAssetMap().getAsset(interaction);
-                        if (root != null) {
-                            InteractionContext context = InteractionContext.forInteraction(
-                                    manager,
-                                    player.getReference(),
-                                    InteractionType.CollisionLeave,
-                                    -1,
-                                    store
-                            );
-
-                            InteractionChain chain = manager.initChain(
-                                    InteractionType.CollisionLeave,
-                                    context,
-                                    root,
-                                    true
-                            );
-
-                            manager.queueExecuteChain(chain);
-                        }
-                    }
-
-
-                    old.close(manager);
+                    AbilityHud.resetSlot(playerRef, player, old.getOldSlot());
                 }
-            } else if (hasHud) {
-                currentHud.updateDirection(headRotation.getDirection().normalize());
             }
         }
     }
