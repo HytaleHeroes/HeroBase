@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.event.events.player.DrainPlayerFromWorldEv
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -23,6 +24,8 @@ import gg.hytaleheroes.herobase.component.AbilityHotbarConfiguration;
 import gg.hytaleheroes.herobase.component.UnlockedAbilitiesComponent;
 import gg.hytaleheroes.herobase.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.config.ModConfig;
+import gg.hytaleheroes.herobase.config.PvpConfig;
+import gg.hytaleheroes.herobase.config.PvpConfigEntry;
 import gg.hytaleheroes.herobase.format.TinyMsg;
 import gg.hytaleheroes.herobase.gui.hud.AbilityHud;
 import gg.hytaleheroes.herobase.gui.hud.LeaderboardHud;
@@ -32,6 +35,7 @@ import gg.hytaleheroes.herobase.leaderboard.Leaderboards;
 import gg.hytaleheroes.herobase.system.AbilityKeybindSystem;
 import gg.hytaleheroes.herobase.system.LeaderboardUpdateSystem;
 import gg.hytaleheroes.herobase.system.PlayerPvpEvents;
+import gg.hytaleheroes.herobase.system.PreventPvpDamageFilterSystem;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -43,6 +47,7 @@ import java.util.logging.Level;
 public class HeroBase extends JavaPlugin {
     private final Config<ModConfig> config;
     private final Config<DatabaseConfig> dbConfig;
+    private final Config<PvpConfig> pvpConfig;
 
     public static HeroBase INSTANCE;
 
@@ -55,6 +60,7 @@ public class HeroBase extends JavaPlugin {
         super(init);
         this.config = this.withConfig("HeroBase", ModConfig.CODEC);
         this.dbConfig = this.withConfig("Database", DatabaseConfig.CODEC);
+        this.pvpConfig = this.withConfig("Pvp", PvpConfig.CODEC);
     }
 
     public static HeroBase get() {
@@ -157,6 +163,7 @@ public class HeroBase extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new AbilityKeybindSystem());
         this.getEntityStoreRegistry().registerSystem(new LeaderboardUpdateSystem(1));
         this.getEntityStoreRegistry().registerSystem(new PlayerPvpEvents());
+        this.getEntityStoreRegistry().registerSystem(new PreventPvpDamageFilterSystem());
     }
 
     @Override
@@ -182,5 +189,9 @@ public class HeroBase extends JavaPlugin {
 
     public Leaderboards getLeaderboards() {
         return leaderboards;
+    }
+
+    public Config<PvpConfig> getPvpConfig() {
+        return pvpConfig;
     }
 }
