@@ -1,0 +1,5 @@
+{
+  "Name": "Cast",
+  "Icon": "enchant-acid-2.png",
+  "Interaction": "Staff_Cast_Summon_Charged"
+}

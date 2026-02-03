@@ -30,7 +30,6 @@ public final class Ability implements JsonAsset<String>, JsonAssetWithMap<String
                     (config, x) -> config.name = x,
                     (config) -> config.name,
                     (config, parent) -> config.name = parent.name)
-            .addValidator(CommonAssetValidator.ICON_ITEM)
             .metadata(new UIEditor(new UIEditor.Icon("Icons/ItemsGenerated/{assetId}.png", 64, 64)))
             .metadata(new UIRebuildCaches(UIRebuildCaches.ClientCache.MODEL_TEXTURES))
             .add()

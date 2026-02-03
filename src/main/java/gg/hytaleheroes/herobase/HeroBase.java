@@ -13,6 +13,7 @@ import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entity.player.PlayerSystems;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -97,7 +98,7 @@ public class HeroBase extends JavaPlugin {
         AbilityCooldownsComponent.setup(this.getEntityStoreRegistry());
         AbilityHotbarConfiguration.setup(this.getEntityStoreRegistry());
 
-        this.getCommandRegistry().registerCommand(new BaseCommand());
+        this.getCommandRegistry().registerCommand(new HeroBaseCommand());
         this.getEventRegistry().register(PlayerConnectEvent.class, PlayerWelcomeHandler::onPlayerJoin);
         this.getAssetRegistry().register(HytaleAssetStore.builder(Ability.class, new DefaultAssetMap<>()).setPath("Abilities").setCodec(Ability.CODEC).setKeyFunction(Ability::getId).build());
 
@@ -107,18 +108,16 @@ public class HeroBase extends JavaPlugin {
         this.inboundFilter = PacketAdapters.registerInbound(handler);
 
         this.getEventRegistry().registerGlobal(AddPlayerToWorldEvent.class, (event) -> {
-            if (event.getWorld().getName().equals("arena")) {
+            var conf = pvpConfig.get().pvpConfigEntryMap.get(event.getWorld().getName());
+            if (conf != null) {
                 var playerRef = event.getHolder().getComponent(PlayerRef.getComponentType());
                 var player = event.getHolder().getComponent(Player.getComponentType());
                 if (playerRef != null && player != null) {
-                    MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef));
+                    MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef, conf.mode));
                 }
-            }
-        });
-
-        this.getEventRegistry().registerGlobal(DrainPlayerFromWorldEvent.class, (event) -> {
-            if (event.getWorld().getName().equals("arena")) {
-                MultipleHUD.getInstance().hideCustomHud(event.getHolder().getComponent(Player.getComponentType()), LeaderboardHud.ID);
+            } else {
+                var player = event.getHolder().getComponent(Player.getComponentType());
+                MultipleHUD.getInstance().hideCustomHud(player, LeaderboardHud.ID);
             }
         });
 
@@ -176,5 +175,13 @@ public class HeroBase extends JavaPlugin {
         config.load();
         dbConfig.load();
         pvpConfig.load();
+    }
+
+    static {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("SQLite JDBC driver not on classpath", e);
+        }
     }
 }

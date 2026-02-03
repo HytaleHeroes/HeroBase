@@ -14,5 +14,5 @@ public class PvpConfig {
                     (config, extraInfo) -> config.pvpConfigEntryMap).add()
             .build();
 
-    public Map<String, PvpConfigEntry> pvpConfigEntryMap;
+    public Map<String, PvpConfigEntry> pvpConfigEntryMap = new HashMap<>();
 }

@@ -1,7 +1,7 @@
 {
   "Group": "HytaleHeroes",
   "Name": "HeroBase",
-  "Version": "1.0.5",
+  "Version": "1.1.1",
   "Description": "A base mod",
   "Authors": [
     {
@@ -11,7 +11,6 @@
   "Website": "hytaleheroes.gg",
   "ServerVersion": ">1",
   "Dependencies": {
-    "Hytale:NPC": "*"
   },
   "OptionalDependencies": {},
   "DisabledByDefault": false,

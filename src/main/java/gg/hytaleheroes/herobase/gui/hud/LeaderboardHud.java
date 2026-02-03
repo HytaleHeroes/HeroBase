@@ -13,8 +13,11 @@ import java.time.Duration;
 public class LeaderboardHud extends CustomUIHud {
     public static String ID = "pvp_leaderboard";
 
-    public LeaderboardHud(@Nonnull PlayerRef playerRef) {
+    private final String mode;
+
+    public LeaderboardHud(@Nonnull PlayerRef playerRef, String mode) {
         super(playerRef);
+        this.mode = mode;
     }
 
     @Override
@@ -22,14 +25,19 @@ public class LeaderboardHud extends CustomUIHud {
         uiCommandBuilder.append("LeaderboardHud.ui");
 
         try {
-            var top = HeroBase.get().getLeaderboards().topKillsInWindow("ffa", 10, Duration.ofHours(1));
+            var top = HeroBase.get().getLeaderboards().topKillsInWindow(mode, 10, Duration.ofHours(1));
             for (int i = 0; i < 10; i++) {
                 uiCommandBuilder.append("#List", "LeaderboardEntry.ui");
 
-                var size = i < 3 ? 22 : 18;
+                var size = i < 3 ? 21 : 17;
+                var col = i == 0 ? "#EFBF04" : i == 1 ? "#C0C0C0" : i == 2 ? "#B87333" : "#9a9a9a";
                 uiCommandBuilder.set("#List["+i+"] #Number.Style.FontSize", size);
                 uiCommandBuilder.set("#List["+i+"] #Name.Style.FontSize", size);
                 uiCommandBuilder.set("#List["+i+"] #Score.Style.FontSize", size);
+
+                uiCommandBuilder.set("#List["+i+"] #Number.Style.TextColor", col);
+                uiCommandBuilder.set("#List["+i+"] #Name.Style.TextColor", col);
+                uiCommandBuilder.set("#List["+i+"] #Score.Style.TextColor", col);
 
                 if (i >= top.size()) {
                     uiCommandBuilder.set("#List["+i+"] #Number.Text", String.valueOf(i+1));

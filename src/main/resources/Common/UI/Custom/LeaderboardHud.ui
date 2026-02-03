@@ -2,7 +2,7 @@ $Common = "Common.ui";
 
 Group #Root {
   LayoutMode: Top;
-  Background: #455555(0.5);
+  Background: #152525(0.3);
   Anchor: (Width: 240, Height: 360, Right: 10);
   Padding: (Full: 5, Bottom: 40);
 

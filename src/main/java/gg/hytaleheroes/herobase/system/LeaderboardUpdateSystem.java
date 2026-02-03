@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.system.tick.DelayedEntitySystem;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.HeroBase;
 import gg.hytaleheroes.herobase.gui.hud.LeaderboardHud;
 
 import javax.annotation.Nonnull;
@@ -21,6 +22,10 @@ public class LeaderboardUpdateSystem extends DelayedEntitySystem<EntityStore> {
 
     @Override
     public void tick(float v, int i, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        var conf = HeroBase.get().getPvpConfig().get().pvpConfigEntryMap.get(commandBuffer.getExternalData().getWorld().getName());
+        if (conf == null)
+            return;
+
         var player = archetypeChunk.getComponent(i, Player.getComponentType());
         if (player == null)
             return;
@@ -29,8 +34,8 @@ public class LeaderboardUpdateSystem extends DelayedEntitySystem<EntityStore> {
         if (playerRef == null)
             return;
 
-        MultipleHUD.getInstance().hideCustomHud(player, LeaderboardHud.ID);
-        MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef));
+
+        MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef, conf.mode));
     }
 
     @Nullable
