@@ -12,8 +12,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 
-public class BaseCommand extends AbstractPlayerCommand { // checkout the other base command classes too
-    public BaseCommand() {
+public class HeroBaseCommand extends AbstractPlayerCommand { // checkout the other base command classes too
+    public HeroBaseCommand() {
         super("herobase", "herobase.commands.herobase.desc");
         this.requirePermission("herobase.herobase");
         this.setPermissionGroup(GameMode.Creative);

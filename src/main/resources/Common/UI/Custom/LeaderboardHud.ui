@@ -1,0 +1,19 @@
+$Common = "Common.ui";
+
+Group #Root {
+  LayoutMode: Top;
+  Background: #455555(0.5);
+  Anchor: (Width: 240, Height: 360, Right: 10);
+  Padding: (Full: 5, Bottom: 40);
+
+  Label #Title {
+    Anchor: (Height: 50);
+    Style: LabelStyle(FontSize: 25, Alignment: Center, VerticalAlignment: Center);
+    Text: "Leaderboard";
+  }
+
+  Group #List {
+    LayoutMode: Top;
+
+  }
+}
