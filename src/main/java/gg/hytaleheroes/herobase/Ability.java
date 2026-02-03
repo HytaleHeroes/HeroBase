@@ -35,7 +35,7 @@ public final class Ability implements JsonAsset<String>, JsonAssetWithMap<String
             .metadata(new UIRebuildCaches(UIRebuildCaches.ClientCache.MODEL_TEXTURES))
             .add()
 
-            .appendInherited(new KeyedCodec<>("Name", Codec.INTEGER),
+            .appendInherited(new KeyedCodec<>("Cooldown", Codec.INTEGER),
                     (config, x) -> config.cooldown = x,
                     (config) -> config.cooldown,
                     (config, parent) -> config.cooldown = parent.cooldown)

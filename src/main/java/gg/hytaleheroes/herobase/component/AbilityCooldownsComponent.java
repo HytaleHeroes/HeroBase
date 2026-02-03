@@ -30,7 +30,6 @@ public class AbilityCooldownsComponent implements Component<EntityStore> {
             .add()
             .build();
 
-
     @NullableDecl
     @Override
     public Component<EntityStore> clone() {
@@ -43,7 +42,7 @@ public class AbilityCooldownsComponent implements Component<EntityStore> {
         return internal;
     }
 
-    public boolean add(String id, Integer cooldown) {
+    public Integer add(String id, Integer cooldown) {
         return internal.put(id, cooldown);
     }
 
@@ -52,7 +51,15 @@ public class AbilityCooldownsComponent implements Component<EntityStore> {
     }
 
     public boolean hasCooldown(String id) {
-        return internal.getOrDefault(id, 0) > 0;
+        var val = internal.get(id);
+        if (val == null) {
+            return false;
+        } else if (val <= 0) {
+            internal.remove(id);
+            return false;
+        }
+
+        return true;
     }
 
     public Integer remove(String id) {

@@ -26,7 +26,6 @@ public class AbilityHotbarConfiguration implements Component<EntityStore> {
 
     Int2ObjectMap<String> slots = new Int2ObjectOpenHashMap<>();
 
-
     public static final BuilderCodec<AbilityHotbarConfiguration> CODEC = BuilderCodec.builder(AbilityHotbarConfiguration.class, AbilityHotbarConfiguration::new)
             .append(new KeyedCodec<>("Slots", new Int2ObjectMapCodec<>(Codec.STRING, Int2ObjectOpenHashMap::new)), (o, v) -> o.slots = v, (o) -> o.slots)
             .documentation("Slot configuration")
@@ -41,4 +40,12 @@ public class AbilityHotbarConfiguration implements Component<EntityStore> {
         return conf;
     }
 
+    public Int2ObjectMap<String> getSlots() {
+        return slots;
+    }
+
+    public AbilityHotbarConfiguration setSlots(Int2ObjectMap<String> slots) {
+        this.slots = slots;
+        return this;
+    }
 }

@@ -7,26 +7,25 @@ import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.Packet;
 import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChain;
 import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChains;
-import com.hypixel.hytale.protocol.packets.inventory.SetActiveSlot;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.InteractionManager;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
 import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.Ability;
 import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.component.AbilityCooldownsComponent;
+import gg.hytaleheroes.herobase.component.AbilityHotbarConfiguration;
 import gg.hytaleheroes.herobase.gui.hud.AbilityHud;
 
 import javax.annotation.Nonnull;
 
 public class AbilitySlotHandler implements PlayerPacketFilter {
-    private static final int ABILITY_SLOT = 8;  // Slot index 8 = Key "9"
-
 
     @Override
     public boolean test(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
@@ -42,7 +41,7 @@ public class AbilitySlotHandler implements PlayerPacketFilter {
                         && chain.data != null
                         && chain.initial) {
 
-                    handleAbilityTrigger(playerRef, hud);
+                    handleAbilityTrigger(playerRef, hud, chain.data.targetSlot);
                     return true;
                 }
             }
@@ -51,7 +50,7 @@ public class AbilitySlotHandler implements PlayerPacketFilter {
         return false;
     }
 
-    private void handleAbilityTrigger(PlayerRef playerRef, AbilityHud hud) {
+    private void handleAbilityTrigger(PlayerRef playerRef, AbilityHud hud, int targetSlot) {
         Ref<EntityStore> entityRef = playerRef.getReference();
         if (entityRef == null || !entityRef.isValid()) {
             return;
@@ -66,34 +65,49 @@ public class AbilitySlotHandler implements PlayerPacketFilter {
                 return;
             }
 
-            AbilityHud.resetSlot(playerRef, player);
-
-            ComponentType<EntityStore, InteractionManager> managerType = InteractionModule.get().getInteractionManagerComponent();
-
-            var interaction = "Dash_Skill";
-
-            InteractionManager manager = store.getComponent(entityRef, managerType);
-            if (manager != null) {
-                var root = RootInteraction.getAssetStore().getAssetMap().getAsset(interaction);
-                if (root != null) {
-                    InteractionContext context = InteractionContext.forInteraction(
-                            manager,
-                            entityRef,
-                            InteractionType.Ability3,
-                            -1,
-                            store
-                    );
-
-                    InteractionChain chain = manager.initChain(
-                            InteractionType.CollisionLeave,
-                            context,
-                            root,
-                            true
-                    );
-
-                    manager.queueExecuteChain(chain);
+            var slotConfig = store.ensureAndGetComponent(entityRef, AbilityHotbarConfiguration.getComponentType());
+            var abilityId = slotConfig.getSlots().get(targetSlot);
+            if (abilityId != null) {
+                var ability = Ability.getAssetMap().getAsset(abilityId);
+                if (ability != null) {
+                    var cooldowns = store.ensureAndGetComponent(entityRef, AbilityCooldownsComponent.getComponentType());
+                    if (!cooldowns.hasCooldown(abilityId)) {
+                        cast(entityRef, store, ability);
+                        cooldowns.add(ability);
+                    }
                 }
             }
+
+            AbilityHud.resetSlot(playerRef, player);
         });
+    }
+
+    private void cast(Ref<EntityStore> entityRef, Store<EntityStore> store, Ability ability) {
+        ComponentType<EntityStore, InteractionManager> managerType = InteractionModule.get().getInteractionManagerComponent();
+
+        var interaction = ability.getInteraction();
+
+        InteractionManager manager = store.getComponent(entityRef, managerType);
+        if (manager != null) {
+            var root = RootInteraction.getAssetStore().getAssetMap().getAsset(interaction);
+            if (root != null) {
+                InteractionContext context = InteractionContext.forInteraction(
+                        manager,
+                        entityRef,
+                        InteractionType.Ability3,
+                        -1,
+                        store
+                );
+
+                InteractionChain chain = manager.initChain(
+                        InteractionType.CollisionLeave,
+                        context,
+                        root,
+                        true
+                );
+
+                manager.queueExecuteChain(chain);
+            }
+        }
     }
 }

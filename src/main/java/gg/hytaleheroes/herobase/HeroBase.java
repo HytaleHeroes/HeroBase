@@ -2,16 +2,14 @@ package gg.hytaleheroes.herobase;
 
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
-import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.util.Config;
-import gg.hytaleheroes.herobase.command.BaseCommand;
+import gg.hytaleheroes.herobase.command.HeroBaseCommand;
 import gg.hytaleheroes.herobase.component.AbilityCooldownsComponent;
 import gg.hytaleheroes.herobase.component.AbilityHotbarConfiguration;
 import gg.hytaleheroes.herobase.component.UnlockedAbilitiesComponent;
@@ -61,7 +59,7 @@ public class HeroBase extends JavaPlugin {
 
         this.getAssetRegistry().register(HytaleAssetStore.builder(Ability.class, new DefaultAssetMap<>()).setPath("Abilities").setCodec(Ability.CODEC).setKeyFunction(Ability::getId).build());
 
-        this.getCommandRegistry().registerCommand(new BaseCommand());
+        this.getCommandRegistry().registerCommand(new HeroBaseCommand());
 
         AbilitySlotHandler handler = new AbilitySlotHandler();
         this.inboundFilter = PacketAdapters.registerInbound(handler);
