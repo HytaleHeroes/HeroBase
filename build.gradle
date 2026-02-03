@@ -15,7 +15,8 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
+    maven { url "https://maven.hytale.com/release" }
+    maven { url "https://cursemaven.com" }
 
     flatDir {
         dirs("libs")
@@ -23,15 +24,16 @@ repositories {
 }
 
 dependencies {
-    // DB-ORM
-    //implementation("de.tomalbrc:db-bundle:1.2.3")
+    implementation 'com.hypixel.hytale:Server:2026.01.28-87d03be09'
+
+    //compileOnly("curse.maven:simpleclaims-1405415:7540330") // 1.0.25
+    implementation("curse.maven:multiplehud-1423634:7530266") // 1.0.4
+
+    implementation(":AccessoriesPlugin-1.2.0")
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    //implementation "com.hypixel.hytale:Server:1.0.0" // TODO: once its on mavenCentral
-    implementation(":HytaleServer")
 }
 
 shadowJar {

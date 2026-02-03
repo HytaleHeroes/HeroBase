@@ -1,0 +1,17 @@
+{
+  "Parent": "Melee_Root",
+  "Interactions": [
+    "Dash_Skill"
+  ],
+  "Tags": {
+    "Attack": [
+      "Melee"
+    ]
+  },
+  "RequireNewClick": false,
+  "Rules": {
+    "Interrupting": [
+      "Primary"
+    ]
+  }
+}
