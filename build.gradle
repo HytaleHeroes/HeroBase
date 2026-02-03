@@ -15,6 +15,7 @@ configurations {
 }
 
 repositories {
+    mavenCentral();
     maven { url "https://maven.hytale.com/release" }
     maven { url "https://cursemaven.com" }
 
@@ -28,6 +29,11 @@ dependencies {
 
     //compileOnly("curse.maven:simpleclaims-1405415:7540330") // 1.0.25
     implementation("curse.maven:multiplehud-1423634:7530266") // 1.0.4
+
+    shade 'com.google.guava:guava:33.4.8-jre'
+    shade 'org.xerial:sqlite-jdbc:3.51.1.0'
+    shade 'org.mariadb.jdbc:mariadb-java-client:3.5.7'
+    shade 'com.zaxxer:HikariCP:5.0.1'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'

@@ -1,0 +1,26 @@
+$Common = "Common.ui";
+
+Group {
+  Anchor: (Height: 30);
+  Padding: (Full: 8);
+  LayoutMode: Left;
+
+  Label #Number {
+    FlexWeight: 2;
+    Padding: (Right: 5);
+    Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+    Text: "1";
+  }
+
+  Label #Name {
+    FlexWeight: 6;
+    Style: LabelStyle(Alignment: Start, VerticalAlignment: Center);
+    Text: "1";
+  }
+
+  Label #Score {
+    FlexWeight: 3;
+    Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+    Text: "1";
+  }
+}

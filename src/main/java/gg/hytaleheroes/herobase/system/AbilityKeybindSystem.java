@@ -3,25 +3,15 @@ package gg.hytaleheroes.herobase.system;
 import com.buuz135.mhud.MultipleHUD;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.protocol.packets.interface_.HudComponent;
-import com.hypixel.hytale.protocol.packets.inventory.SetActiveSlot;
-import com.hypixel.hytale.server.core.entity.InteractionChain;
-import com.hypixel.hytale.server.core.entity.InteractionContext;
-import com.hypixel.hytale.server.core.entity.InteractionManager;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.Ability;
@@ -31,9 +21,6 @@ import gg.hytaleheroes.herobase.gui.hud.AbilityHud;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 // TODO: this could be a RefChangeSystem too?
 public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
@@ -55,7 +42,7 @@ public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
         HeadRotation headRotation = archetypeChunk.getComponent(index, HeadRotation.getComponentType());
         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
 
-        var huds = HeroBase.get().activeHuds();
+        var huds = HeroBase.get().getActiveHuds();
 
         if (transform != null && headRotation != null && player != null && statesComponent != null && playerRef != null && playerRef.isValid()) {
             MovementStates movementStates = statesComponent.getMovementStates();

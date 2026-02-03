@@ -1,48 +1,72 @@
 package gg.hytaleheroes.herobase;
 
+import com.buuz135.mhud.EmptyHUD;
+import com.buuz135.mhud.MultipleHUD;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.event.events.player.AddPlayerToWorldEvent;
+import com.hypixel.hytale.server.core.event.events.player.DrainPlayerFromWorldEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.util.Config;
 import gg.hytaleheroes.herobase.command.HeroBaseCommand;
 import gg.hytaleheroes.herobase.component.AbilityCooldownsComponent;
 import gg.hytaleheroes.herobase.component.AbilityHotbarConfiguration;
 import gg.hytaleheroes.herobase.component.UnlockedAbilitiesComponent;
+import gg.hytaleheroes.herobase.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.config.ModConfig;
 import gg.hytaleheroes.herobase.format.TinyMsg;
 import gg.hytaleheroes.herobase.gui.hud.AbilityHud;
+import gg.hytaleheroes.herobase.gui.hud.LeaderboardHud;
 import gg.hytaleheroes.herobase.handler.AbilitySlotHandler;
+import gg.hytaleheroes.herobase.leaderboard.DatabaseManager;
+import gg.hytaleheroes.herobase.leaderboard.Leaderboards;
 import gg.hytaleheroes.herobase.system.AbilityKeybindSystem;
+import gg.hytaleheroes.herobase.system.LeaderboardUpdateSystem;
+import gg.hytaleheroes.herobase.system.PlayerPvpEvents;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public class HeroBase extends JavaPlugin {
     private final Config<ModConfig> config;
+    private final Config<DatabaseConfig> dbConfig;
 
     public static HeroBase INSTANCE;
 
     private PacketFilter inboundFilter;
     private ConcurrentHashMap<UUID, AbilityHud> activeHuds;
+    private DatabaseManager databaseManager;
+    private Leaderboards leaderboards;
 
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
         this.config = this.withConfig("HeroBase", ModConfig.CODEC);
+        this.dbConfig = this.withConfig("Database", DatabaseConfig.CODEC);
     }
 
     public static HeroBase get() {
         return INSTANCE;
     }
 
-    public ConcurrentHashMap<UUID, AbilityHud> activeHuds() {
+    public ConcurrentHashMap<UUID, AbilityHud> getActiveHuds() {
         return this.activeHuds;
+    }
+
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 
     @Override
@@ -51,6 +75,13 @@ public class HeroBase extends JavaPlugin {
 
         INSTANCE = this;
 
+        this.config.save();
+        this.dbConfig.save();
+
+        var dbCfg = this.dbConfig.get();
+
+        this.databaseManager = new DatabaseManager(dbCfg);
+        this.leaderboards = new Leaderboards();
         this.activeHuds = new ConcurrentHashMap<>();
 
         UnlockedAbilitiesComponent.setup(this.getEntityStoreRegistry());
@@ -63,6 +94,22 @@ public class HeroBase extends JavaPlugin {
 
         AbilitySlotHandler handler = new AbilitySlotHandler();
         this.inboundFilter = PacketAdapters.registerInbound(handler);
+
+        this.getEventRegistry().registerGlobal(AddPlayerToWorldEvent.class, (event) -> {
+            if (event.getWorld().getName().equals("arena")) {
+                var playerRef = event.getHolder().getComponent(PlayerRef.getComponentType());
+                var player = event.getHolder().getComponent(Player.getComponentType());
+                if (playerRef != null && player != null) {
+                    MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef));
+                }
+            }
+        });
+
+        this.getEventRegistry().registerGlobal(DrainPlayerFromWorldEvent.class, (event) -> {
+            if (event.getWorld().getName().equals("arena")) {
+                MultipleHUD.getInstance().hideCustomHud(event.getHolder().getComponent(Player.getComponentType()), LeaderboardHud.ID);
+            }
+        });
 
         this.getEventRegistry().register(PlayerConnectEvent.class, (event) -> {
             var cfg = this.config.get();
@@ -94,6 +141,13 @@ public class HeroBase extends JavaPlugin {
             }
         });
 
+        this.getEventRegistry().register(PlayerConnectEvent.class, (event) -> {
+            try {
+                this.leaderboards.updatePlayer(event.getPlayerRef().getUuid(), event.getPlayerRef().getUsername());
+            } catch (SQLException e) {
+                HytaleLogger.forEnclosingClass().at(Level.SEVERE).log("Could not save player information!");
+            }
+        });
     }
 
     @Override
@@ -101,6 +155,8 @@ public class HeroBase extends JavaPlugin {
         super.start();
 
         this.getEntityStoreRegistry().registerSystem(new AbilityKeybindSystem());
+        this.getEntityStoreRegistry().registerSystem(new LeaderboardUpdateSystem(1));
+        this.getEntityStoreRegistry().registerSystem(new PlayerPvpEvents());
     }
 
     @Override
@@ -111,10 +167,20 @@ public class HeroBase extends JavaPlugin {
             PacketAdapters.deregisterInbound(this.inboundFilter);
         }
 
-        this.activeHuds.clear();
+        if (this.activeHuds != null) {
+            this.activeHuds.clear();
+        }
+
+        if (this.leaderboards != null) {
+            this.leaderboards.shutdown();
+        }
     }
 
     public Config<ModConfig> getConfig() {
         return config;
+    }
+
+    public Leaderboards getLeaderboards() {
+        return leaderboards;
     }
 }

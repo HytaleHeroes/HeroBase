@@ -33,7 +33,7 @@ public class AbilitySlotHandler implements PlayerPacketFilter {
             return false;
         }
 
-        var hud = HeroBase.get().activeHuds().get(playerRef.getUuid());
+        var hud = HeroBase.get().getActiveHuds().get(playerRef.getUuid());
 
         if (hud != null)  {
             for (SyncInteractionChain chain : syncPacket.updates) {
