@@ -1,14 +1,16 @@
 package gg.hytaleheroes.herobase.system;
 
-import com.hypixel.hytale.component.*;
-import com.hypixel.hytale.component.dependency.Dependency;
-import com.hypixel.hytale.component.dependency.Order;
-import com.hypixel.hytale.component.dependency.SystemDependency;
-import com.hypixel.hytale.component.dependency.SystemGroupDependency;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.SystemGroup;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.modules.entity.damage.*;
+import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
+import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
+import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.HeroBase;
@@ -16,7 +18,6 @@ import gg.hytaleheroes.herobase.HeroBase;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.SQLException;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class PlayerPvpEvents extends DeathSystems.OnDeathSystem {
@@ -37,7 +38,7 @@ public class PlayerPvpEvents extends DeathSystems.OnDeathSystem {
 
         var playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
         var damage = deathComponent.getDeathInfo();
-        if (damage != null && playerRef != null && !(damage.getAmount() <= 0.0F)) {
+        if (damage != null && playerRef != null && damage.getAmount() > 0.0F) {
             Damage.Source damageSource = damage.getSource();
 
             if (damageSource instanceof Damage.EntitySource entitySource) {

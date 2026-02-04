@@ -1,47 +1,40 @@
 package gg.hytaleheroes.herobase;
 
-import com.buuz135.mhud.EmptyHUD;
 import com.buuz135.mhud.MultipleHUD;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.AddPlayerToWorldEvent;
-import com.hypixel.hytale.server.core.event.events.player.DrainPlayerFromWorldEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
-import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
-import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
-import com.hypixel.hytale.server.core.modules.entity.player.PlayerSystems;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.util.Config;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import gg.hytaleheroes.herobase.command.HeroBaseCommand;
+import gg.hytaleheroes.herobase.command.ability.AbilityCommand;
 import gg.hytaleheroes.herobase.component.AbilityCooldownsComponent;
 import gg.hytaleheroes.herobase.component.AbilityHotbarConfiguration;
 import gg.hytaleheroes.herobase.component.UnlockedAbilitiesComponent;
 import gg.hytaleheroes.herobase.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.config.ModConfig;
 import gg.hytaleheroes.herobase.config.PvpConfig;
-import gg.hytaleheroes.herobase.config.PvpConfigEntry;
-import gg.hytaleheroes.herobase.handler.PlayerWelcomeHandler;
-import gg.hytaleheroes.herobase.npc.action.BuilderActionSendMessage;
 import gg.hytaleheroes.herobase.gui.hud.AbilityHud;
 import gg.hytaleheroes.herobase.gui.hud.LeaderboardHud;
 import gg.hytaleheroes.herobase.handler.AbilitySlotHandler;
+import gg.hytaleheroes.herobase.handler.PlayerWelcomeHandler;
 import gg.hytaleheroes.herobase.leaderboard.DatabaseManager;
 import gg.hytaleheroes.herobase.leaderboard.Leaderboards;
+import gg.hytaleheroes.herobase.npc.action.BuilderActionSendMessage;
 import gg.hytaleheroes.herobase.system.AbilityKeybindSystem;
 import gg.hytaleheroes.herobase.system.LeaderboardUpdateSystem;
 import gg.hytaleheroes.herobase.system.PlayerPvpEvents;
 import gg.hytaleheroes.herobase.system.PreventPvpDamageFilterSystem;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -98,11 +91,11 @@ public class HeroBase extends JavaPlugin {
         AbilityCooldownsComponent.setup(this.getEntityStoreRegistry());
         AbilityHotbarConfiguration.setup(this.getEntityStoreRegistry());
 
-        this.getCommandRegistry().registerCommand(new HeroBaseCommand());
         this.getEventRegistry().register(PlayerConnectEvent.class, PlayerWelcomeHandler::onPlayerJoin);
         this.getAssetRegistry().register(HytaleAssetStore.builder(Ability.class, new DefaultAssetMap<>()).setPath("Abilities").setCodec(Ability.CODEC).setKeyFunction(Ability::getId).build());
 
         this.getCommandRegistry().registerCommand(new HeroBaseCommand());
+        this.getCommandRegistry().registerCommand(new AbilityCommand());
 
         AbilitySlotHandler handler = new AbilitySlotHandler();
         this.inboundFilter = PacketAdapters.registerInbound(handler);

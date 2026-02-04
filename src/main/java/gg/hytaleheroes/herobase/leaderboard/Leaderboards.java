@@ -298,7 +298,13 @@ public class Leaderboards {
         String sql = "DELETE FROM kills WHERE ts < ?";
 
         try (Connection c = HeroBase.get().getDatabaseManager().openConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setTimestamp(1, Timestamp.from(cutoff));
+
+            if (HeroBase.get().getDatabaseManager().isSqlite()) {
+                ps.setString(1, Timestamp.from(cutoff).toString());
+            } else {
+                ps.setTimestamp(1, Timestamp.from(cutoff));
+            }
+
             int deleted = ps.executeUpdate();
             if (deleted > 0) {
                 HytaleLogger.forEnclosingClass().at(Level.INFO).log("Deleted " + deleted + " old kills older than " + window);
@@ -325,7 +331,13 @@ public class Leaderboards {
 
         try (Connection c = HeroBase.get().getDatabaseManager().openConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             int idx = 1;
-            ps.setTimestamp(idx++, Timestamp.from(cutoff));
+
+            if (HeroBase.get().getDatabaseManager().isSqlite()) {
+                ps.setString(idx++, Timestamp.from(cutoff).toString());
+            } else {
+                ps.setTimestamp(idx++, Timestamp.from(cutoff));
+            }
+
             for (String m : modes) ps.setString(idx++, m);
             ps.setInt(idx, n);
 
