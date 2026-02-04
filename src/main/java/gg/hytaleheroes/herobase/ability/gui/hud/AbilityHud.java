@@ -27,13 +27,13 @@ public class AbilityHud extends CustomUIHud {
 
     @Override
     protected void build(@Nonnull UICommandBuilder uiCommandBuilder) {
-        uiCommandBuilder.append("AbilityHud.ui");
+        uiCommandBuilder.append("Pages/AbilityHud.ui");
 
         for (int i = 0; i < this.abilities.size(); i++) {
             var ability = this.abilities.get(i);
-            uiCommandBuilder.append("#Root #Bar", "AbilityButton.ui");
+            uiCommandBuilder.append("#Root #Bar", "Pages/AbilityButton.ui");
             uiCommandBuilder.set("#Root #Bar["+i+"] #Name.Text", ability.getName());
-            uiCommandBuilder.set("#Root #Bar["+i+"] #Icon.AssetPath", "UI/Custom/" + ability.getIcon());
+            uiCommandBuilder.set("#Root #Bar["+i+"] #Icon.AssetPath", "UI/Custom/Pages/" + ability.getIcon());
         }
     }
 

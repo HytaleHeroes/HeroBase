@@ -1,0 +1,19 @@
+$Common = "Common.ui";
+
+@progressBarWidth = 70;
+
+Group #SkillButton {
+  Anchor: (Width: 96, Height: 96);
+  Padding: (Full: 2);
+
+  AssetImage #Icon {
+    Anchor: (Full: 0);
+    AssetPath: "UI/Custom/Pages/beam-acid-2.png";
+  }
+
+  Label #Name {
+    Style: (Alignment: Start, VerticalAlignment: Start);
+    Anchor: (Full: 0);
+    Text: "1";
+  }
+}

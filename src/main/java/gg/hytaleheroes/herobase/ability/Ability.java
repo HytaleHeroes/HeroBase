@@ -26,9 +26,9 @@ public final class Ability implements JsonAsset<String>, JsonAssetWithMap<String
             .add()
 
             .appendInherited(new KeyedCodec<>("Icon", Codec.STRING),
-                    (config, x) -> config.name = x,
-                    (config) -> config.name,
-                    (config, parent) -> config.name = parent.name)
+                    (config, x) -> config.icon = x,
+                    (config) -> config.icon,
+                    (config, parent) -> config.icon = parent.icon)
             .metadata(new UIEditor(new UIEditor.Icon("Icons/ItemsGenerated/{assetId}.png", 64, 64)))
             .metadata(new UIRebuildCaches(UIRebuildCaches.ClientCache.MODEL_TEXTURES))
             .add()

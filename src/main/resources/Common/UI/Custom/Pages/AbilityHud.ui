@@ -8,15 +8,15 @@ Group #Root {
     Anchor: (Width: 700, Height: 200);
     LayoutMode: Top;
     Label #AbilityLabel {
-      Style: (FontSize: 32, Alignment: Center, VerticalAlignment: Start);
-      Anchor: (Width: 700, Height: 70);
-      Text: "Hello";
+      Style: (FontSize: 24, Alignment: Center, VerticalAlignment: Start);
+      Anchor: (Width: 700, Height: 50);
+      Text: "Skill Selection";
 
       Padding: (Full: 10);
     }
 
     Group {
-      Anchor: (Height: 40);
+      Anchor: (Height: 70);
     }
 
     Group #Bar {

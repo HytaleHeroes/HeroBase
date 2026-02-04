@@ -131,7 +131,7 @@ public class HeroBase extends JavaPlugin {
         super.start();
 
         this.getEntityStoreRegistry().registerSystem(new AbilityKeybindSystem());
-        this.getEntityStoreRegistry().registerSystem(new LeaderboardUpdateSystem(1));
+        this.getEntityStoreRegistry().registerSystem(new LeaderboardUpdateSystem(2));
         this.getEntityStoreRegistry().registerSystem(new PlayerPvpEvents());
         this.getEntityStoreRegistry().registerSystem(new PreventPvpDamageFilterSystem());
     }
