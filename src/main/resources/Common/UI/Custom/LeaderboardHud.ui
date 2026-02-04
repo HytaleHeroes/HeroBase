@@ -2,12 +2,12 @@ $Common = "Common.ui";
 
 Group #Root {
   LayoutMode: Top;
-  Background: #152525(0.3);
-  Anchor: (Width: 250, Height: 360, Right: 8);
+  Background: #151a1a(0.35);
+  Anchor: (Width: 260, Height: 360, Right: 8);
   Padding: (Full: 5, Bottom: 40);
 
   Label #Title {
-    Anchor: (Height: 50);
+    Anchor: (Height: 40);
     Style: LabelStyle(FontSize: 25, Alignment: Center, VerticalAlignment: Center);
     Text: "Leaderboard";
   }

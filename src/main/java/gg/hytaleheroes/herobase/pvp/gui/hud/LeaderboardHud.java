@@ -40,6 +40,8 @@ public class LeaderboardHud extends CustomUIHud {
             var window = configEntry == null ? 4 : configEntry.leaderboardTimeWindowHours;
             var top = HeroBase.get().getLeaderboards().topKillsInWindow(mode, 10, Duration.ofHours(window));
 
+            boolean hadMe = false;
+
             for (int i = 0; i < 10; i++) {
                 uiCommandBuilder.append("#List", "LeaderboardEntry.ui");
 
@@ -64,6 +66,19 @@ public class LeaderboardHud extends CustomUIHud {
                     uiCommandBuilder.set(selector + "#Number.Text", String.valueOf(i + 1));
                     uiCommandBuilder.set(selector + "#Name.Text", HeroBase.get().getLeaderboards().getUsername(entry.playerId()));
                     uiCommandBuilder.set(selector + "#Score.Text", String.valueOf(entry.score()));
+
+                    hadMe |= entry.playerId().equals(getPlayerRef().getUuid());
+                }
+
+                if (!hadMe && i == 9) {
+                    uiCommandBuilder.set(selector + "#Number.Text", "-");
+                    uiCommandBuilder.set(selector + "#Name.Text", this.getPlayerRef().getUsername());
+
+                    var entry = HeroBase.get().getLeaderboards().getEntry(getPlayerRef().getUuid(), mode);
+                    if (entry == null)
+                        uiCommandBuilder.set(selector + "#Score.Text", "0");
+                    else
+                        uiCommandBuilder.set(selector + "#Score.Text", String.valueOf(HeroBase.get().getLeaderboards().getEntry(getPlayerRef().getUuid(), mode).score()));
                 }
             }
 

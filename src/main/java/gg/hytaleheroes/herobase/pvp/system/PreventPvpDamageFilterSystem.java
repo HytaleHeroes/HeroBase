@@ -1,6 +1,9 @@
 package gg.hytaleheroes.herobase.pvp.system;
 
-import com.hypixel.hytale.component.*;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.SystemGroup;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -39,10 +42,12 @@ public class PreventPvpDamageFilterSystem extends DamageEventSystem {
         assert transformComponent != null;
 
         if (playerComponent.hasSpawnProtection()) {
+            damage.setAmount(0);
             damage.setCancelled(true);
         } else {
             if (world.getWorldConfig().isPvpEnabled()) {
                 if (transformComponent.getTransform().getPosition().getY() > conf.preventPvpAbove) {
+                    damage.setAmount(0);
                     damage.setCancelled(true);
                 }
             }
