@@ -18,9 +18,14 @@ public class PvpConfigEntry {
                     (config, x, extraInfo) -> config.preventPvpAbove = x,
                     (config, extraInfo) -> config.preventPvpAbove).add()
 
+            .append(new KeyedCodec<>("LeaderboardTimeWindowHours", Codec.INTEGER),
+                    (config, x, extraInfo) -> config.leaderboardTimeWindowHours = x,
+                    (config, extraInfo) -> config.leaderboardTimeWindowHours).add()
+
             .build();
 
     public String command = "arena";
     public String mode = "ffa";
     public int preventPvpAbove = 140;
+    public int leaderboardTimeWindowHours = 4;
 }

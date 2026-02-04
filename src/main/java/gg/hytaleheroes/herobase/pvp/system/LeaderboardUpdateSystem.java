@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.HeroBase;
-import gg.hytaleheroes.herobase.pvp.leaderboard.LeaderboardHud;
+import gg.hytaleheroes.herobase.pvp.gui.hud.LeaderboardHud;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +35,7 @@ public class LeaderboardUpdateSystem extends DelayedEntitySystem<EntityStore> {
             return;
 
 
-        MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef, conf.mode));
+        MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef, commandBuffer.getExternalData().getWorld().getName(), conf.mode));
     }
 
     @Nullable

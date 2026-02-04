@@ -24,7 +24,7 @@ import gg.hytaleheroes.herobase.core.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.core.config.ModConfig;
 import gg.hytaleheroes.herobase.pvp.config.PvpConfig;
 import gg.hytaleheroes.herobase.ability.gui.hud.AbilityHud;
-import gg.hytaleheroes.herobase.pvp.leaderboard.LeaderboardHud;
+import gg.hytaleheroes.herobase.pvp.gui.hud.LeaderboardHud;
 import gg.hytaleheroes.herobase.ability.handler.AbilitySlotHandler;
 import gg.hytaleheroes.herobase.extra.handler.PlayerWelcomeHandler;
 import gg.hytaleheroes.herobase.pvp.leaderboard.DatabaseManager;
@@ -106,8 +106,8 @@ public class HeroBase extends JavaPlugin {
             if (conf != null) {
                 var playerRef = event.getHolder().getComponent(PlayerRef.getComponentType());
                 var player = event.getHolder().getComponent(Player.getComponentType());
-                if (playerRef != null && player != null) {
-                    MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef, conf.mode));
+                if (playerRef != null && player != null && player.getWorld() != null) {
+                    MultipleHUD.getInstance().setCustomHud(player, playerRef, LeaderboardHud.ID, new LeaderboardHud(playerRef, player.getWorld().getName(), conf.mode));
                 }
             } else {
                 var player = event.getHolder().getComponent(Player.getComponentType());

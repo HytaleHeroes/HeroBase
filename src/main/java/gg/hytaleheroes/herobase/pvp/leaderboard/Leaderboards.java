@@ -28,8 +28,8 @@ public class Leaderboards {
     private final Duration cleanupWindow;
 
     public Leaderboards() {
-        // clean up kill entries older than 2 hour, every 10 mins
-        this(Duration.ofHours(2), Duration.ofMinutes(10));
+        // clean up kill entries older than 12 hour, every 30 mins
+        this(Duration.ofHours(HeroBase.get().getPvpConfig().get().keepKillsSavedHours), Duration.ofMinutes(30));
     }
 
     public Leaderboards(Duration window, Duration interval) {
