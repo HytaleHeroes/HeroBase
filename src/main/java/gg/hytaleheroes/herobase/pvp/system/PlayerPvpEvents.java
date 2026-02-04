@@ -13,7 +13,7 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.pvp.PvpModule;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,7 +33,7 @@ public class PlayerPvpEvents extends DeathSystems.OnDeathSystem {
 
     @Override
     public void onComponentAdded(@Nonnull Ref<EntityStore> ref, @Nonnull DeathComponent deathComponent, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        var conf = HeroBase.get().getPvpConfig().get().pvpConfigEntryMap.get(commandBuffer.getExternalData().getWorld().getName());
+        var conf = PvpModule.get().getConfig().pvpConfigEntryMap.get(commandBuffer.getExternalData().getWorld().getName());
         if (conf == null) return;
 
         var playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
@@ -47,7 +47,7 @@ public class PlayerPvpEvents extends DeathSystems.OnDeathSystem {
                     PlayerRef sourcePlayerRef = commandBuffer.getComponent(sourceRef, PlayerRef.getComponentType());
                     if (sourcePlayerRef != null && sourcePlayerRef.isValid()) {
                         try {
-                            HeroBase.get().getLeaderboards().recordKill(sourcePlayerRef.getUuid(), playerRef.getUuid(), conf.mode);
+                            PvpModule.get().leaderboards().recordKill(sourcePlayerRef.getUuid(), playerRef.getUuid(), conf.mode);
                         } catch (SQLException e) {
                             HytaleLogger.forEnclosingClass().at(Level.SEVERE).log("Error while recording kill", e);
                         }

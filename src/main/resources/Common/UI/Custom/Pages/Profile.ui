@@ -1,0 +1,234 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Center;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 720, Height: 500);
+
+    #Title {
+      Label {
+        Text: "Players Profile";
+        Style: (
+          ...$C.@TitleStyle,
+          HorizontalAlignment: Center,
+        );
+      }
+    }
+
+    #Content {
+      Group {
+        LayoutMode: Top;
+        Padding: (Full: 10);
+        Group {
+          LayoutMode: Left;
+          AssetImage #ProfileImage {
+            Anchor: (Width: 160, Height: 160);
+            Padding: (Full: 4);
+            AssetPath: "UI/Custom/Pages/Profile.png";
+          }
+          Group {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Padding: (Left: 10, Right: 10);
+            Label #NameLabel {
+              Text: "Player Name";
+              Style: LabelStyle(FontSize: 29, Alignment: Start, VerticalAlignment: Start);
+              Padding: (Top: 9);
+              FlexWeight: 3;
+            }
+            Label #RankLabel {
+              Text: "Hero";
+              FlexWeight: 2;
+            }
+            Label {
+              Text: "Status:";
+              Style: LabelStyle(FontSize: 15, TextColor: #aaaaaa);
+              FlexWeight: 1;
+            }
+            $C.@TextField #StatusLabel {
+              PlaceholderText: "What's up!";
+              FlexWeight: 2;
+            }
+          }
+        }
+
+        Label {
+          Text: "Stats:";
+          Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+          Padding: (Full: 10);
+        }
+        Group {
+          LayoutMode: Left;
+          Group {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Padding: (Full: 4);
+            Group {
+              FlexWeight: 1;
+
+              LayoutMode: Top;
+              Background: #222222;
+              Label {
+                Text: "FFA Arena";
+                Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Kills:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+            }
+          }
+          Group {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Padding: (Full: 4);
+            Group {
+              FlexWeight: 1;
+
+              LayoutMode: Top;
+              Background: #222222;
+              Label {
+                Text: "Ranked 1v1";
+                Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Kills:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Deaths:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+            }
+          }
+          Group {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Padding: (Full: 4);
+            Group {
+              FlexWeight: 1;
+
+              LayoutMode: Top;
+              Background: #222222;
+              Label {
+                Text: "Ranked 2v2";
+                Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Kills:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Deaths:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+
+            }
+          }
+          Group {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Padding: (Full: 4);
+            Group {
+              FlexWeight: 1;
+
+              LayoutMode: Top;
+              Background: #222222;
+              Label {
+                Text: "Hero 1v1";
+                Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Kills:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+              Group {
+                LayoutMode: Left;
+                Label {
+                  FlexWeight: 1;
+                  Text: "Deaths:";
+                  Style: (Alignment: Start, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+                Label {
+                  FlexWeight: 1;
+                  Text: "0";
+                  Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+                  Padding: (Full: 4);
+                }
+              }
+
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.pvp.PvpModule;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +32,7 @@ public class PreventPvpDamageFilterSystem extends DamageEventSystem {
 
     public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull Damage damage) {
         World world = store.getExternalData().getWorld();
-        var conf = HeroBase.get().getPvpConfig().get().pvpConfigEntryMap.get(world.getName());
+        var conf = PvpModule.get().getConfig().pvpConfigEntryMap.get(world.getName());
         if (conf == null) return;
 
         Player playerComponent = archetypeChunk.getComponent(index, Player.getComponentType());

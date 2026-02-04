@@ -1,5 +1,5 @@
 {
   "Name": "Boomshot",
-  "Icon": "horror-acid-2.png",
+  "Icon": "UI/Custom/Pages/Ability/horror-acid-2.png",
   "Interaction": "Bow_Bomb_Boomshot"
 }

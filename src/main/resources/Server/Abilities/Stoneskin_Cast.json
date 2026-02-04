@@ -1,5 +1,5 @@
 {
   "Name": "Stoneskin",
-  "Icon": "explosion-magenta-2.png",
+  "Icon": "UI/Custom/Pages/Ability/explosion-magenta-2.png",
   "Interaction": "Stoneskin_Cast"
 }

@@ -9,7 +9,7 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import gg.hytaleheroes.herobase.TinyMsg;
+import gg.hytaleheroes.herobase.core.TinyMsg;
 
 import javax.annotation.Nonnull;
 

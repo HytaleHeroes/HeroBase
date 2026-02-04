@@ -1,0 +1,24 @@
+$Common = "Common.ui";
+
+Group #Card {
+  Anchor: (Width: 380);
+  LayoutMode: Top;
+  FlexWeight: 1;
+  Padding: (Full: 4);
+
+  Group {
+    FlexWeight: 1;
+    Padding: (Bottom: 10);
+    LayoutMode: Top;
+    Background: #222222;
+    Label #CardTitle {
+      Padding: (Vertical: 16);
+      Text: "FFA Arena";
+      Style: LabelStyle(FontSize: 29, Alignment: Center, VerticalAlignment: Center);
+    }
+    Group #Entries {
+      LayoutMode: Top;
+
+    }
+  }
+}

@@ -1,0 +1,27 @@
+$C = "../../Common.ui";
+
+Group {
+  LayoutMode: Center;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 840, Height: 600);
+
+    #Title {
+      Label {
+        Text: "Leaderboards";
+        Style: (
+          ...$C.@TitleStyle,
+          HorizontalAlignment: Center,
+        );
+      }
+    }
+
+    #Content {
+      LayoutMode: TopScrolling;
+      Group #Cards {
+        LayoutMode: LeftCenterWrap;
+
+      }
+    }
+  }
+}

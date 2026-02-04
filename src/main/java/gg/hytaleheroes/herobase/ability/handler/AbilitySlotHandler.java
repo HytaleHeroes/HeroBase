@@ -18,7 +18,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.ability.Ability;
-import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.ability.AbilityModule;
 import gg.hytaleheroes.herobase.ability.component.AbilityCooldownsComponent;
 import gg.hytaleheroes.herobase.ability.component.AbilityHotbarConfiguration;
 import gg.hytaleheroes.herobase.ability.gui.hud.AbilityHud;
@@ -33,7 +33,7 @@ public class AbilitySlotHandler implements PlayerPacketFilter {
             return false;
         }
 
-        var hud = HeroBase.get().getActiveHuds().get(playerRef.getUuid());
+        var hud = AbilityModule.get().getActiveHuds().get(playerRef.getUuid());
 
         if (hud != null)  {
             for (SyncInteractionChain chain : syncPacket.updates) {

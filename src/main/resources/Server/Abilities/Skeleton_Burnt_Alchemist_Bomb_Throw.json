@@ -1,5 +1,5 @@
 {
   "Name": "Bomb Throw",
-  "Icon": "haste-sky-2.png",
+  "Icon": "UI/Custom/Pages/Ability/haste-sky-2.png",
   "Interaction": "Skeleton_Burnt_Alchemist_Bomb_Throw"
 }

@@ -3,7 +3,7 @@ package gg.hytaleheroes.herobase.pvp.gui.hud;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.pvp.PvpModule;
 import gg.hytaleheroes.herobase.pvp.config.PvpConfigEntry;
 import gg.hytaleheroes.herobase.pvp.leaderboard.LeaderboardEntry;
 
@@ -21,11 +21,11 @@ public class LeaderboardHud extends CustomUIHud {
         super(playerRef);
         this.mode = mode;
 
-        var map = HeroBase.get().getPvpConfig().get().pvpConfigEntryMap;
+        var map = PvpModule.get().getConfig().pvpConfigEntryMap;
         if (map == null)
             return;
 
-        var configEntry = HeroBase.get().getPvpConfig().get().pvpConfigEntryMap.get(world);
+        var configEntry = PvpModule.get().getConfig().pvpConfigEntryMap.get(world);
         if (configEntry == null)
             return;
 
@@ -38,12 +38,12 @@ public class LeaderboardHud extends CustomUIHud {
 
         try {
             var window = configEntry == null ? 4 : configEntry.leaderboardTimeWindowHours;
-            var top = HeroBase.get().getLeaderboards().topKillsInWindow(mode, 10, Duration.ofHours(window));
+            var top = PvpModule.get().leaderboards().topKillsInWindow(mode, 10, Duration.ofHours(window));
 
             boolean hadMe = false;
 
             for (int i = 0; i < 10; i++) {
-                uiCommandBuilder.append("#List", "Pages/Leaderboard/LeaderboardEntry.ui");
+                uiCommandBuilder.append("#List", "Pages/Leaderboard/LeaderboardHudEntry.ui");
 
                 var selector = "#List[" + i + "] ";
 
@@ -64,7 +64,7 @@ public class LeaderboardHud extends CustomUIHud {
                 } else {
                     LeaderboardEntry entry = top.get(i);
                     uiCommandBuilder.set(selector + "#Number.Text", String.valueOf(i + 1));
-                    uiCommandBuilder.set(selector + "#Name.Text", HeroBase.get().getLeaderboards().getUsername(entry.playerId()));
+                    uiCommandBuilder.set(selector + "#Name.Text", PvpModule.get().leaderboards().getUsername(entry.playerId()));
                     uiCommandBuilder.set(selector + "#Score.Text", String.valueOf(entry.score()));
 
                     hadMe |= entry.playerId().equals(getPlayerRef().getUuid());
@@ -74,11 +74,11 @@ public class LeaderboardHud extends CustomUIHud {
                     uiCommandBuilder.set(selector + "#Number.Text", "-");
                     uiCommandBuilder.set(selector + "#Name.Text", this.getPlayerRef().getUsername());
 
-                    var entry = HeroBase.get().getLeaderboards().getEntry(getPlayerRef().getUuid(), mode);
+                    var entry = PvpModule.get().leaderboards().getEntry(getPlayerRef().getUuid(), mode);
                     if (entry == null)
                         uiCommandBuilder.set(selector + "#Score.Text", "0");
                     else
-                        uiCommandBuilder.set(selector + "#Score.Text", String.valueOf(HeroBase.get().getLeaderboards().getEntry(getPlayerRef().getUuid(), mode).score()));
+                        uiCommandBuilder.set(selector + "#Score.Text", String.valueOf(PvpModule.get().leaderboards().getEntry(getPlayerRef().getUuid(), mode).score()));
                 }
             }
 

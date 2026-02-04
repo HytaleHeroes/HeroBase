@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.hypixel.hytale.logger.HytaleLogger;
 import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.pvp.PvpModule;
 import org.jspecify.annotations.NonNull;
 
 import java.sql.*;
@@ -29,7 +30,7 @@ public class Leaderboards {
 
     public Leaderboards() {
         // clean up kill entries older than 12 hour, every 30 mins
-        this(Duration.ofHours(HeroBase.get().getPvpConfig().get().keepKillsSavedHours), Duration.ofMinutes(30));
+        this(Duration.ofHours(PvpModule.get().getConfig().keepKillsSavedHours), Duration.ofMinutes(30));
     }
 
     public Leaderboards(Duration window, Duration interval) {
@@ -422,6 +423,46 @@ public class Leaderboards {
 
         statsCache.invalidate(playerId + "|" + mode);
         topCache.asMap().keySet().removeIf(k -> k.contains("|stats|"));
+    }
+
+    public List<LeaderboardEntry> getTopPlayers(String mode, int n) throws SQLException {
+        String key = "top|" + mode + "|" + n;
+
+        List<LeaderboardEntry> cached = topCache.getIfPresent(key);
+        if (cached != null) return cached;
+
+        String sql = """
+                SELECT leaderboard_id, player_id, mode, score, updated_at
+                FROM leaderboard
+                WHERE mode = ?
+                ORDER BY score DESC
+                LIMIT ?
+                """;
+
+        try (Connection c = HeroBase.get().getDatabaseManager().openConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, mode);
+            ps.setInt(2, n);
+
+            ResultSet rs = ps.executeQuery();
+            List<LeaderboardEntry> list = new ArrayList<>();
+
+            while (rs.next()) {
+                LeaderboardEntry e = new LeaderboardEntry(
+                        rs.getLong("leaderboard_id"),
+                        UUID.fromString(rs.getString("player_id")),
+                        rs.getString("mode"),
+                        rs.getInt("score"),
+                        rs.getTimestamp("updated_at").toInstant()
+                );
+                list.add(e);
+            }
+
+            List<LeaderboardEntry> result = List.copyOf(list);
+            topCache.put(key, result);
+            return result;
+        }
     }
 
     public record ModeStats(String mode, long kills, long deaths, Instant updatedAt) {

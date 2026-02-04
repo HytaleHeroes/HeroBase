@@ -15,17 +15,13 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.ability.Ability;
-import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.ability.AbilityModule;
 import gg.hytaleheroes.herobase.ability.component.AbilityHotbarConfiguration;
-import gg.hytaleheroes.herobase.ability.component.UnlockedAbilitiesComponent;
 import gg.hytaleheroes.herobase.ability.gui.hud.AbilityHud;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 // TODO: this could be a RefChangeSystem too?
 public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
@@ -49,7 +45,7 @@ public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
         HeadRotation headRotation = archetypeChunk.getComponent(index, HeadRotation.getComponentType());
         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
 
-        var huds = HeroBase.get().getActiveHuds();
+        var huds = AbilityModule.get().getActiveHuds();
 
         if (transform != null && headRotation != null && statesComponent != null && playerRef != null && playerRef.isValid()) {
             MovementStates movementStates = statesComponent.getMovementStates();

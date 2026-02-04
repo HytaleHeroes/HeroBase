@@ -1,5 +1,5 @@
 {
   "Name": "Cast",
-  "Icon": "enchant-acid-2.png",
+  "Icon": "UI/Custom/Pages/Ability/enchant-acid-2.png",
   "Interaction": "Staff_Cast_Summon_Charged"
 }

@@ -1,5 +1,5 @@
 {
   "Name": "Dash",
-  "Icon": "beam-acid-2.png",
+  "Icon": "UI/Custom/Pages/Ability/beam-acid-2.png",
   "Interaction": "Daggers_Bash"
 }

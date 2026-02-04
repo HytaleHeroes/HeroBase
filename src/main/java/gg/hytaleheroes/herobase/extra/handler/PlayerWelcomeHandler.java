@@ -3,7 +3,7 @@ package gg.hytaleheroes.herobase.extra.handler;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.universe.Universe;
 import gg.hytaleheroes.herobase.HeroBase;
-import gg.hytaleheroes.herobase.TinyMsg;
+import gg.hytaleheroes.herobase.core.TinyMsg;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ public class PlayerWelcomeHandler {
     private PlayerWelcomeHandler() {}
 
     public static void onPlayerJoin(PlayerConnectEvent event) {
-        var config = HeroBase.INSTANCE.getConfig();
+        var config = HeroBase.get().getConfig();
 
         boolean isNewPlayer;
         try {

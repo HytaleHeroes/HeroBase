@@ -1,4 +1,4 @@
-package gg.hytaleheroes.herobase;
+package gg.hytaleheroes.herobase.core;
 
 import com.hypixel.hytale.protocol.MaybeBool;
 import com.hypixel.hytale.server.core.Message;

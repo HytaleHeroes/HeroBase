@@ -8,20 +8,19 @@ Group {
   Label #Number {
     FlexWeight: 2;
     Padding: (Right: 5);
-    Style: LabelStyle(FontSize: 25, Alignment: Center, VerticalAlignment: Center);
+    Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
     Text: "1";
   }
 
   Label #Name {
     FlexWeight: 6;
-    Padding: (Right: 5);
-    Style: LabelStyle(FontSize: 25, Alignment: Start, VerticalAlignment: Center);
+    Style: LabelStyle(Alignment: Start, VerticalAlignment: Center);
     Text: "1";
   }
 
   Label #Score {
     FlexWeight: 3;
-    Style: LabelStyle(FontSize: 25, Alignment: End, VerticalAlignment: Center);
+    Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
     Text: "1";
   }
 }

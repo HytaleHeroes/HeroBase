@@ -37,7 +37,7 @@ public class AbilityHud extends CustomUIHud {
             if (ability != null) {
                 uiCommandBuilder.append("#Root #Bar", "Pages/Ability/AbilityButton.ui");
                 uiCommandBuilder.set("#Root #Bar[" + index + "] #Name.Text", ability.getName());
-                uiCommandBuilder.set("#Root #Bar[" + index + "] #Icon.AssetPath", "UI/Custom/Pages/Ability/" + ability.getIcon());
+                uiCommandBuilder.set("#Root #Bar[" + index + "] #Icon.AssetPath", ability.getIcon());
 
                 index++;
             }
