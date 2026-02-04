@@ -10,8 +10,11 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.CompletableFuture;
 
 public class ProfilePage extends CustomUIPage {
+    private boolean didRun = false;
+
     public ProfilePage(@Nonnull PlayerRef playerRef, @Nonnull CustomPageLifetime lifetime) {
         super(playerRef, lifetime);
     }
@@ -20,8 +23,16 @@ public class ProfilePage extends CustomUIPage {
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
         uiCommandBuilder.append("Pages/Profile.ui");
 
-        var p = PlayerProfileAsset.load(playerRef.getUsername());
-        PlayerProfileAsset.send(playerRef.getPacketHandler(), p);
+        if (!didRun) {
+            CompletableFuture.runAsync(() -> {
+                if (playerRef.isValid()) {
+                    var p = PlayerProfileAsset.load(playerRef.getUsername());
+                    PlayerProfileAsset.send(playerRef.getPacketHandler(), p);
+                    rebuild();
+                }
+            });
+            didRun = true;
+        }
 
         uiCommandBuilder.set("#NameLabel.Text", playerRef.getUsername());
     }

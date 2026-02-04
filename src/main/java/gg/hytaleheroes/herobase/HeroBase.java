@@ -7,6 +7,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import gg.hytaleheroes.herobase.ability.AbilityModule;
+import gg.hytaleheroes.herobase.charm.system.CharmModule;
 import gg.hytaleheroes.herobase.core.command.HeroBaseCommand;
 import gg.hytaleheroes.herobase.core.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.core.config.ModConfig;
@@ -31,6 +32,7 @@ public class HeroBase extends JavaPlugin {
 
     private final PvpModule pvpModule;
     private final AbilityModule abilityModule;
+    private final CharmModule charmModule;
 
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
@@ -39,6 +41,7 @@ public class HeroBase extends JavaPlugin {
 
         this.pvpModule = new PvpModule(this, this.withConfig("Pvp", PvpConfig.CODEC));
         this.abilityModule = new AbilityModule(this);
+        this.charmModule = new CharmModule(this);
     }
 
     public static HeroBase get() {
@@ -64,6 +67,7 @@ public class HeroBase extends JavaPlugin {
 
         this.abilityModule.setup(this);
         this.pvpModule.setup(this);
+        this.charmModule.setup(this);
 
         this.getEventRegistry().register(PlayerConnectEvent.class, PlayerWelcomeHandler::onPlayerJoin);
         this.getEventRegistry().register(PlayerDisconnectEvent.class, (event) -> {
@@ -85,6 +89,7 @@ public class HeroBase extends JavaPlugin {
 
         this.abilityModule.start(this);
         this.pvpModule.start(this);
+        this.charmModule.start(this);
     }
 
     @Override
@@ -93,6 +98,7 @@ public class HeroBase extends JavaPlugin {
 
         this.pvpModule.shutdown(this);
         this.abilityModule.shutdown(this);
+        this.charmModule.shutdown(this);
     }
 
     public Config<ModConfig> getConfig() {
@@ -105,6 +111,7 @@ public class HeroBase extends JavaPlugin {
 
         this.abilityModule.reload(this);
         this.pvpModule.reload(this);
+        this.charmModule.reload(this);
     }
 
     static {
