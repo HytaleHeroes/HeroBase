@@ -21,7 +21,7 @@ public class ReloadAbilitiesCommand extends AbstractAsyncCommand {
     @Override
     protected CompletableFuture<Void> executeAsync(@Nonnull CommandContext commandContext) {
         if (commandContext.sender() instanceof Player player && player.getWorld() != null) {
-            player.getWorld().execute(() -> {
+            return CompletableFuture.runAsync(() -> {
                 if (player.getReference() != null) {
                     var store = player.getWorld().getEntityStore().getStore();
                     var comp = store.ensureAndGetComponent(player.getReference(), AbilityHotbarConfiguration.getComponentType());
@@ -41,7 +41,7 @@ public class ReloadAbilitiesCommand extends AbstractAsyncCommand {
 
                     store.replaceComponent(player.getReference(), AbilityHotbarConfiguration.getComponentType(), comp);
                 }
-            });
+            }, player.getWorld());
         }
 
         return CompletableFuture.completedFuture(null);

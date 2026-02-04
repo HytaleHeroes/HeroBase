@@ -7,17 +7,19 @@ import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import gg.hytaleheroes.herobase.ability.Ability;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class AbilityHud extends CustomUIHud {
-    final List<Ability> abilities;
+    final Int2ObjectMap<String> slots;
     final int oldSlot;
 
-    public AbilityHud(@Nonnull PlayerRef playerRef, List<Ability> abilities, int oldSlot) {
+    public AbilityHud(@Nonnull PlayerRef playerRef, Int2ObjectMap<String> slots, int oldSlot) {
         super(playerRef);
-        this.abilities = abilities;
+
+        this.slots = new Int2ObjectOpenHashMap<>(slots);
         this.oldSlot = oldSlot;
     }
 
@@ -27,13 +29,18 @@ public class AbilityHud extends CustomUIHud {
 
     @Override
     protected void build(@Nonnull UICommandBuilder uiCommandBuilder) {
-        uiCommandBuilder.append("Pages/AbilityHud.ui");
+        uiCommandBuilder.append("Pages/Ability/AbilityHud.ui");
 
-        for (int i = 0; i < this.abilities.size(); i++) {
-            var ability = this.abilities.get(i);
-            uiCommandBuilder.append("#Root #Bar", "Pages/AbilityButton.ui");
-            uiCommandBuilder.set("#Root #Bar["+i+"] #Name.Text", ability.getName());
-            uiCommandBuilder.set("#Root #Bar["+i+"] #Icon.AssetPath", "UI/Custom/Pages/" + ability.getIcon());
+        int index = 0;
+        for (Integer i : slots.keySet().intStream().sorted().boxed().toList()) {
+            var ability = Ability.getAssetMap().getAsset(slots.get(i));
+            if (ability != null) {
+                uiCommandBuilder.append("#Root #Bar", "Pages/Ability/AbilityButton.ui");
+                uiCommandBuilder.set("#Root #Bar[" + index + "] #Name.Text", ability.getName());
+                uiCommandBuilder.set("#Root #Bar[" + index + "] #Icon.AssetPath", "UI/Custom/Pages/Ability/" + ability.getIcon());
+
+                index++;
+            }
         }
     }
 
@@ -42,7 +49,7 @@ public class AbilityHud extends CustomUIHud {
     }
 
     public static void resetSlot(PlayerRef playerRef, Player player, int slot) {
-        player.getInventory().setActiveHotbarSlot((byte)slot);
+        player.getInventory().setActiveHotbarSlot((byte) slot);
         SetActiveSlot setActiveSlotPacket = new SetActiveSlot(
                 Inventory.HOTBAR_SECTION_ID,
                 slot

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class AbilityCooldownsComponent implements Component<EntityStore> {
     private static ComponentType<EntityStore, AbilityCooldownsComponent> TYPE;
-    private Map<String, Integer> internal = new Object2IntOpenHashMap<>();
+    private Object2IntOpenHashMap<String> internal = new Object2IntOpenHashMap<>();
 
     public static ComponentType<EntityStore, AbilityCooldownsComponent> getComponentType() {
         return TYPE;
@@ -26,7 +26,7 @@ public class AbilityCooldownsComponent implements Component<EntityStore> {
     }
 
     public static final BuilderCodec<AbilityCooldownsComponent> CODEC = BuilderCodec.builder(AbilityCooldownsComponent.class, AbilityCooldownsComponent::new)
-            .append(new KeyedCodec<>("Cooldowns", new MapCodec<>(MapCodec.INTEGER, Object2IntOpenHashMap::new)), (data, value) -> data.internal = value, (data) -> data.internal)
+            .append(new KeyedCodec<>("Cooldowns", new MapCodec<>(MapCodec.INTEGER, Object2IntOpenHashMap::new)), (data, value) -> data.internal = new Object2IntOpenHashMap<>(value), (data) -> data.internal)
             .add()
             .build();
 
@@ -55,7 +55,7 @@ public class AbilityCooldownsComponent implements Component<EntityStore> {
         if (val == null) {
             return false;
         } else if (val <= 0) {
-            internal.remove(id);
+            internal.removeInt(id);
             return false;
         }
 
@@ -63,6 +63,6 @@ public class AbilityCooldownsComponent implements Component<EntityStore> {
     }
 
     public Integer remove(String id) {
-        return internal.remove(id);
+        return internal.removeInt(id);
     }
 }

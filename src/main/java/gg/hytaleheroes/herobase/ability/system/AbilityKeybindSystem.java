@@ -16,12 +16,16 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.ability.Ability;
 import gg.hytaleheroes.herobase.HeroBase;
+import gg.hytaleheroes.herobase.ability.component.AbilityHotbarConfiguration;
+import gg.hytaleheroes.herobase.ability.component.UnlockedAbilitiesComponent;
 import gg.hytaleheroes.herobase.ability.gui.hud.AbilityHud;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 // TODO: this could be a RefChangeSystem too?
 public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
@@ -54,20 +58,18 @@ public class AbilityKeybindSystem extends EntityTickingSystem<EntityStore> {
             boolean hasHud = currentHud != null;
 
             if (movementStates.walking && !hasHud) {
-                player.getHudManager().hideHudComponents(playerRef, HudComponent.Hotbar);
+                var comp = archetypeChunk.getComponent(index, AbilityHotbarConfiguration.getComponentType());
+                if (comp != null) {
+                    if (!comp.getSlots().isEmpty()) {
+                        player.getHudManager().hideHudComponents(playerRef, HudComponent.Hotbar);
 
-                List<Ability> abilityList = new ArrayList<>();
-                for (Ability value : Ability.getAssetMap().getAssetMap().values()) {
-                    abilityList.add(value);
-                    if (abilityList.size() >= 8)
-                        break;
+                        var hud = new AbilityHud(playerRef, comp.getSlots(), player.getInventory().getActiveHotbarSlot());
+                        MultipleHUD.getInstance().setCustomHud(player, playerRef, HUD_KEY, hud);
+                        huds.put(playerRef.getUuid(), hud);
+
+                        AbilityHud.resetSlot(playerRef, player);
+                    }
                 }
-
-                var hud = new AbilityHud(playerRef, abilityList, player.getInventory().getActiveHotbarSlot());
-                MultipleHUD.getInstance().setCustomHud(player, playerRef, HUD_KEY, hud);
-                huds.put(playerRef.getUuid(), hud);
-                AbilityHud.resetSlot(playerRef, player);
-
             } else if (!movementStates.walking && hasHud) {
                 player.getHudManager().showHudComponents(playerRef, HudComponent.Hotbar);
                 MultipleHUD.getInstance().hideCustomHud(player, HUD_KEY);

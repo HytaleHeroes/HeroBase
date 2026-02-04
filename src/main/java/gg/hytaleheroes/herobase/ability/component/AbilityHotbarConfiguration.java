@@ -24,10 +24,10 @@ public class AbilityHotbarConfiguration implements Component<EntityStore> {
         AbilityHotbarConfiguration.TYPE = entityStoreRegistry.registerComponent(AbilityHotbarConfiguration.class, "AbilityHotbar", AbilityHotbarConfiguration.CODEC);
     }
 
-    Int2ObjectMap<String> slots = new Int2ObjectOpenHashMap<>();
+    Int2ObjectOpenHashMap<String> slots = new Int2ObjectOpenHashMap<>();
 
     public static final BuilderCodec<AbilityHotbarConfiguration> CODEC = BuilderCodec.builder(AbilityHotbarConfiguration.class, AbilityHotbarConfiguration::new)
-            .append(new KeyedCodec<>("Slots", new Int2ObjectMapCodec<>(Codec.STRING, Int2ObjectOpenHashMap::new)), (o, v) -> o.slots = v, (o) -> o.slots)
+            .append(new KeyedCodec<>("Slots", new Int2ObjectMapCodec<>(Codec.STRING, Int2ObjectOpenHashMap::new)), (o, v) -> o.slots = new Int2ObjectOpenHashMap<>(v), (o) -> o.slots)
             .documentation("Slot configuration")
             .add()
             .build();
@@ -40,11 +40,11 @@ public class AbilityHotbarConfiguration implements Component<EntityStore> {
         return conf;
     }
 
-    public Int2ObjectMap<String> getSlots() {
+    public synchronized Int2ObjectMap<String> getSlots() {
         return slots;
     }
 
-    public AbilityHotbarConfiguration setSlots(Int2ObjectMap<String> slots) {
+    public AbilityHotbarConfiguration setSlots(Int2ObjectOpenHashMap<String> slots) {
         this.slots = slots;
         return this;
     }

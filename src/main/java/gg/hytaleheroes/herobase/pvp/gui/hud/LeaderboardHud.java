@@ -34,7 +34,7 @@ public class LeaderboardHud extends CustomUIHud {
 
     @Override
     protected void build(@Nonnull UICommandBuilder uiCommandBuilder) {
-        uiCommandBuilder.append("LeaderboardHud.ui");
+        uiCommandBuilder.append("Pages/Leaderboard/LeaderboardHud.ui");
 
         try {
             var window = configEntry == null ? 4 : configEntry.leaderboardTimeWindowHours;
@@ -43,7 +43,7 @@ public class LeaderboardHud extends CustomUIHud {
             boolean hadMe = false;
 
             for (int i = 0; i < 10; i++) {
-                uiCommandBuilder.append("#List", "LeaderboardEntry.ui");
+                uiCommandBuilder.append("#List", "Pages/Leaderboard/LeaderboardEntry.ui");
 
                 var selector = "#List[" + i + "] ";
 

@@ -12,7 +12,7 @@ Group #SkillButton {
   }
 
   Label #Name {
-    Style: (Alignment: Start, VerticalAlignment: Start);
+    Style: LabelStyle(FontSize: 13, Alignment: Start, VerticalAlignment: Start);
     Anchor: (Full: 0);
     Text: "1";
   }
