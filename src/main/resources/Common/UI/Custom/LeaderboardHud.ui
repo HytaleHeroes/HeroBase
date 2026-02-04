@@ -3,7 +3,7 @@ $Common = "Common.ui";
 Group #Root {
   LayoutMode: Top;
   Background: #152525(0.3);
-  Anchor: (Width: 240, Height: 360, Right: 10);
+  Anchor: (Width: 250, Height: 360, Right: 8);
   Padding: (Full: 5, Bottom: 40);
 
   Label #Title {

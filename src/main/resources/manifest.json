@@ -11,6 +11,7 @@
   "Website": "hytaleheroes.gg",
   "ServerVersion": ">1",
   "Dependencies": {
+    "Hytale:NPC": "*"
   },
   "OptionalDependencies": {},
   "DisabledByDefault": false,
