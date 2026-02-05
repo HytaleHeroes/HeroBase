@@ -32,7 +32,7 @@ public class PreventPvpDamageFilterSystem extends DamageEventSystem {
 
     public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull Damage damage) {
         World world = store.getExternalData().getWorld();
-        var conf = PvpModule.get().getConfig().pvpConfigEntryMap.get(world.getName());
+        var conf = PvpModule.get().getConfig().getByName(world.getName());
         if (conf == null) return;
 
         Player playerComponent = archetypeChunk.getComponent(index, Player.getComponentType());

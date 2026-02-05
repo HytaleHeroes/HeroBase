@@ -10,6 +10,7 @@ import gg.hytaleheroes.herobase.pvp.leaderboard.LeaderboardEntry;
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.util.Set;
 
 public class LeaderboardHud extends CustomUIHud {
     public static String ID = "pvp_leaderboard";
@@ -21,11 +22,11 @@ public class LeaderboardHud extends CustomUIHud {
         super(playerRef);
         this.mode = mode;
 
-        var map = PvpModule.get().getConfig().pvpConfigEntryMap;
+        var map = PvpModule.get().getConfig().pvpConfigEntries;
         if (map == null)
             return;
 
-        var configEntry = PvpModule.get().getConfig().pvpConfigEntryMap.get(world);
+        var configEntry = PvpModule.get().getConfig().getByName(world);
         if (configEntry == null)
             return;
 
@@ -38,7 +39,7 @@ public class LeaderboardHud extends CustomUIHud {
 
         try {
             var window = configEntry == null ? 4 : configEntry.leaderboardTimeWindowHours;
-            var top = PvpModule.get().leaderboards().topKillsInWindow(mode, 10, Duration.ofHours(window));
+            var top = PvpModule.get().leaderboards().topKillsInWindow(Set.of(mode), 10, Duration.ofHours(window));
 
             boolean hadMe = false;
 

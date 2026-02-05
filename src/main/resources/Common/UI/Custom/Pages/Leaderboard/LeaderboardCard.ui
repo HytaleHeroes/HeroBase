@@ -10,13 +10,15 @@ Group #Card {
     FlexWeight: 1;
     Padding: (Bottom: 10);
     LayoutMode: Top;
-    Background: #222222;
+    Background: #222222(0.5);
     Label #CardTitle {
+      Background: #1a1a1a(0.5);
       Padding: (Vertical: 16);
       Text: "FFA Arena";
       Style: LabelStyle(FontSize: 29, Alignment: Center, VerticalAlignment: Center);
     }
     Group #Entries {
+      Padding: (Top: 10);
       LayoutMode: Top;
 
     }

@@ -13,7 +13,7 @@ import gg.hytaleheroes.herobase.core.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.core.config.ModConfig;
 import gg.hytaleheroes.herobase.extra.action.BuilderActionSendMessage;
 import gg.hytaleheroes.herobase.extra.handler.PlayerWelcomeHandler;
-import gg.hytaleheroes.herobase.extra.leaderboard.LeaderboardCommand;
+import gg.hytaleheroes.herobase.pvp.command.LeaderboardCommand;
 import gg.hytaleheroes.herobase.extra.navigator.NavigatorCommand;
 import gg.hytaleheroes.herobase.extra.profile.PlayerProfileAsset;
 import gg.hytaleheroes.herobase.extra.profile.ProfileCommand;

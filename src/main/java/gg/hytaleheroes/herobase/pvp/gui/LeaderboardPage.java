@@ -1,4 +1,4 @@
-package gg.hytaleheroes.herobase.extra.leaderboard;
+package gg.hytaleheroes.herobase.pvp.gui;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -9,18 +9,12 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import gg.hytaleheroes.herobase.pvp.PvpModule;
+import gg.hytaleheroes.herobase.pvp.config.PvpConfigEntry;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
-import java.util.Map;
 
 public class LeaderboardPage extends CustomUIPage {
-    private static final Map<String, String> modes = Map.of(
-            "ffa", "FFA",
-            "r1v1", "Ranked 1v1",
-            "r2v2", "Ranked 2v2",
-            "h2v2", "Hero 1v1"
-    );
 
     public LeaderboardPage(@Nonnull PlayerRef playerRef, @Nonnull CustomPageLifetime lifetime) {
         super(playerRef, lifetime);
@@ -31,13 +25,13 @@ public class LeaderboardPage extends CustomUIPage {
         uiCommandBuilder.append("Pages/Leaderboard/Leaderboard.ui");
 
         int cardIndex = 0;
-        for (Map.Entry<String, String> entry : modes.entrySet()) {
+        for (PvpConfigEntry entry : PvpModule.get().getConfig().pvpConfigEntries) {
             uiCommandBuilder.append("#Cards", "Pages/Leaderboard/LeaderboardCard.ui");
 
-            uiCommandBuilder.set("#Cards[" + cardIndex + "] #CardTitle.Text", entry.getValue());
+            uiCommandBuilder.set("#Cards[" + cardIndex + "] #CardTitle.Text", entry.name);
 
             try {
-                var entries = PvpModule.get().leaderboards().getTopPlayers(entry.getKey(), 10);
+                var entries = PvpModule.get().leaderboards().getTopPlayers(entry.mode, 10);
 
                 for (int i = 0; i < 10; i++) {
                     var e = entries.size()-1 <= i ? null : entries.get(i);
@@ -72,5 +66,6 @@ public class LeaderboardPage extends CustomUIPage {
 
             cardIndex++;
         }
+
     }
 }

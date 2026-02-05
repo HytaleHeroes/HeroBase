@@ -22,8 +22,8 @@ public class LeaderboardUpdateSystem extends DelayedEntitySystem<EntityStore> {
 
     @Override
     public void tick(float v, int i, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        var conf = PvpModule.get().getConfig().pvpConfigEntryMap.get(commandBuffer.getExternalData().getWorld().getName());
-        if (conf == null)
+        var conf = PvpModule.get().getConfig().getByName(commandBuffer.getExternalData().getWorld().getName());
+        if (conf == null || !conf.leaderboard)
             return;
 
         var player = archetypeChunk.getComponent(i, Player.getComponentType());
