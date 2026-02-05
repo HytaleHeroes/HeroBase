@@ -53,7 +53,7 @@ public class LeaderboardPage extends CustomUIPage {
 
                     if (e != null) {
                         uiCommandBuilder.set("#Cards[" + cardIndex + "] #Entries[" + i + "] #Name.Text", PvpModule.get().leaderboards().getUsername(e.playerId()));
-                        uiCommandBuilder.set("#Cards[" + cardIndex + "] #Entries[" + i + "] #Score.Text", e.score());
+                        uiCommandBuilder.set("#Cards[" + cardIndex + "] #Entries[" + i + "] #Score.Text", String.valueOf(e.score()));
                     } else {
                         uiCommandBuilder.set("#Cards[" + cardIndex + "] #Entries[" + i + "] #Name.Text", "---");
                         uiCommandBuilder.set("#Cards[" + cardIndex + "] #Entries[" + i + "] #Score.Text", "-");
