@@ -94,7 +94,7 @@ public class ProfilePage extends InteractiveCustomUIPage<ProfilePage.GuiData> {
             didRun = true;
         }
 
-        uiCommandBuilder.set("#NameLabel.Text", playerRef.getUsername());
+        uiCommandBuilder.set("#NameLabel.Text", playerName);
 
         CompletableFuture.runAsync(() -> {
             try {
