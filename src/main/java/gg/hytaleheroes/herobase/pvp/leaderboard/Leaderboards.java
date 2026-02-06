@@ -181,6 +181,44 @@ public class Leaderboards {
         }
     }
 
+    public List<LeaderboardEntry> getTopPlayersPaged(String mode, int offset, int limit) throws SQLException {
+        String key = mode + "|top|lifetime|offset=" + offset + "|limit=" + limit;
+        List<LeaderboardEntry> cached = topCache.getIfPresent(key);
+        if (cached != null) return cached;
+
+        String sql =
+                "SELECT player_id, kills, updated_at " +
+                        "FROM stats_mode " +
+                        "WHERE mode = ? " +
+                        "ORDER BY kills DESC " +
+                        "LIMIT ? OFFSET ?";
+
+        try (Connection c = HeroBase.get().getDatabaseManager().openConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, mode);
+            ps.setInt(2, limit);
+            ps.setInt(3, offset);
+
+            ResultSet rs = ps.executeQuery();
+            List<LeaderboardEntry> list = new ArrayList<>();
+
+            while (rs.next()) {
+                list.add(new LeaderboardEntry(
+                        0,
+                        UUID.fromString(rs.getString("player_id")),
+                        mode,
+                        rs.getInt("kills"),
+                        rs.getTimestamp("updated_at").toInstant()
+                ));
+            }
+
+            List<LeaderboardEntry> immutable = List.copyOf(list);
+            topCache.put(key, immutable);
+            return immutable;
+        }
+    }
+
     public List<LeaderboardEntry> topKillsInWindow(Collection<String> modes, int n, Duration window) throws SQLException {
         String modesKey = String.join(",", modes);
         String key = "modes|" + modesKey + "|" + n + "|recent|" + window.getSeconds();

@@ -1,4 +1,4 @@
-$C = "../Common.ui";
+$C = "../../Common.ui";
 
 Group {
   LayoutMode: Center;
@@ -7,7 +7,7 @@ Group {
     Anchor: (Width: 720, Height: 500);
 
     #Title {
-      Label {
+      Label #TitleLabel {
         Text: "Players Profile";
         Style: (
           ...$C.@TitleStyle,
@@ -25,7 +25,7 @@ Group {
           AssetImage #ProfileImage {
             Anchor: (Width: 160, Height: 160);
             Padding: (Full: 4);
-            AssetPath: "UI/Custom/Pages/Profile.png";
+            AssetPath: "UI/Custom/Pages/Profile/Profile.png";
           }
           Group {
             LayoutMode: Top;
@@ -46,9 +46,26 @@ Group {
               Style: LabelStyle(FontSize: 15, TextColor: #aaaaaa);
               FlexWeight: 1;
             }
-            $C.@TextField #StatusLabel {
-              PlaceholderText: "What's up!";
+            Label #StatusLabel {
+              Text: "What's up!";
               FlexWeight: 2;
+              Visible: false;
+            }
+            Group #InputGroup {
+              LayoutMode: Left;
+              $C.@TextField #StatusLabelInput {
+                PlaceholderText: "What's up!";
+                FlexWeight: 2;
+              }
+
+              Group {
+                Anchor: (Width: 10);
+              }
+
+              $C.@SecondaryTextButton #StatusLabelSave {
+                Anchor: (Height: 38);
+                Text: "Save";
+              }
             }
           }
         }

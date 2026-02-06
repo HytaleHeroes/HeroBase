@@ -1,6 +1,5 @@
 package gg.hytaleheroes.herobase;
 
-import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -12,12 +11,11 @@ import gg.hytaleheroes.herobase.core.command.HeroBaseCommand;
 import gg.hytaleheroes.herobase.core.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.core.config.ModConfig;
 import gg.hytaleheroes.herobase.extra.action.BuilderActionSendMessage;
-import gg.hytaleheroes.herobase.extra.handler.PlayerWelcomeHandler;
-import gg.hytaleheroes.herobase.pvp.command.LeaderboardCommand;
 import gg.hytaleheroes.herobase.extra.navigator.NavigatorCommand;
 import gg.hytaleheroes.herobase.extra.profile.PlayerProfileAsset;
 import gg.hytaleheroes.herobase.extra.profile.ProfileCommand;
 import gg.hytaleheroes.herobase.pvp.PvpModule;
+import gg.hytaleheroes.herobase.pvp.command.LeaderboardCommand;
 import gg.hytaleheroes.herobase.pvp.config.PvpConfig;
 import gg.hytaleheroes.herobase.pvp.leaderboard.DatabaseManager;
 
@@ -69,7 +67,6 @@ public class HeroBase extends JavaPlugin {
         this.pvpModule.setup(this);
         this.charmModule.setup(this);
 
-        this.getEventRegistry().register(PlayerConnectEvent.class, PlayerWelcomeHandler::onPlayerJoin);
         this.getEventRegistry().register(PlayerDisconnectEvent.class, (event) -> {
             PlayerProfileAsset.deleteCache(event.getPlayerRef().getUsername());
         });

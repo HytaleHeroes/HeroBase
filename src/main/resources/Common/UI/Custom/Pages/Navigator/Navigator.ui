@@ -1,0 +1,29 @@
+$C = "../../Common.ui";
+
+Group {
+  LayoutMode: Center;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 740, Height: 700);
+
+    #Title {
+      Label #TitleLabel {
+        Text: "Navigator";
+        Style: (
+          ...$C.@TitleStyle,
+          HorizontalAlignment: Center,
+        );
+      }
+    }
+
+    #Content {
+      LayoutMode: TopScrolling;
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+      Group #Entries {
+        LayoutMode: Top;
+
+      }
+    }
+  }
+}

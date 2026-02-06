@@ -1,0 +1,21 @@
+$C = "../../Common.ui";
+
+Group #Section {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+
+  Label #SectionLabel {
+    Style: LabelStyle(FontSize: 19, Alignment: Start, VerticalAlignment: Center);
+
+  }
+
+  Group {
+    Padding: (Full:10, Bottom: 30);
+
+    Background: $C.@InputBoxBackground;
+
+    Group #SectionCards {
+      LayoutMode: Left;
+    }
+  }
+}

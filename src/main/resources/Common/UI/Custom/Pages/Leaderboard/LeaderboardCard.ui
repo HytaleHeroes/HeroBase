@@ -1,4 +1,4 @@
-$Common = "Common.ui";
+$C = "../../Common.ui";
 
 Group #Card {
   Anchor: (Width: 380);
@@ -10,12 +10,30 @@ Group #Card {
     FlexWeight: 1;
     Padding: (Bottom: 10);
     LayoutMode: Top;
-    Background: #222222(0.5);
-    Label #CardTitle {
-      Background: #1a1a1a(0.5);
-      Padding: (Vertical: 16);
-      Text: "FFA Arena";
-      Style: LabelStyle(FontSize: 29, Alignment: Center, VerticalAlignment: Center);
+    Background: $C.@InputBoxBackground;
+    Group {
+      LayoutMode: Left;
+      Background: #1a1a1a(0.2);
+      Padding: (Full: 10, Left: 30);
+      Label #CardTitle {
+        FlexWeight: 2;
+        Text: "FFA Arena";
+        Style: LabelStyle(FontSize: 27, Alignment: Start, VerticalAlignment: Center);
+      }
+      $C.@SecondaryTextButton #PreviousPage {
+        Text: "<";
+        Anchor: (Height: 30, Width: 42);
+        Disabled: true;
+      }
+      Label {
+        Padding: (Horizontal: 10);
+        Style: LabelStyle(FontSize: 19, Alignment: Center, VerticalAlignment: Center);
+        Text: "1 / 10";
+      }
+      $C.@SecondaryTextButton #NextPage {
+        Text: ">";
+        Anchor: (Height: 30, Width: 42);
+      }
     }
     Group #Entries {
       Padding: (Top: 10);

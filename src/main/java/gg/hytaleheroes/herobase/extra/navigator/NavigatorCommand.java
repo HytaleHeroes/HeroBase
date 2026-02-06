@@ -16,7 +16,7 @@ public class NavigatorCommand extends AbstractPlayerCommand {
     public NavigatorCommand() {
         super("navigator", "herobase.commands.navigator.desc");
         this.requirePermission("herobase.navigator");
-        this.addAliases("menu");
+        this.addAliases("menu", "nav");
     }
 
     @Override

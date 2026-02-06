@@ -4,7 +4,7 @@ Group {
   LayoutMode: Center;
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 840, Height: 600);
+    Anchor: (Width: 810, Height: 600);
 
     #Title {
       Label {
@@ -18,6 +18,8 @@ Group {
 
     #Content {
       LayoutMode: TopScrolling;
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
       Group #Cards {
         LayoutMode: LeftCenterWrap;
 

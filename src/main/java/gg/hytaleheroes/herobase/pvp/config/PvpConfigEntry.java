@@ -6,7 +6,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 
 public class PvpConfigEntry {
     public static BuilderCodec<PvpConfigEntry> CODEC = BuilderCodec.builder(PvpConfigEntry.class, PvpConfigEntry::new)
-
             .append(new KeyedCodec<>("Name", Codec.STRING),
                     (config, x, extraInfo) -> config.name = x,
                     (config, extraInfo) -> config.name).add()

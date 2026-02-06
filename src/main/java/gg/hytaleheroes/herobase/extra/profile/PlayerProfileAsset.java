@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 
 public class PlayerProfileAsset extends CommonAsset {
-    private static final String PATH = "UI/Custom/Pages/Profile.png";
+    private static final String PATH = "UI/Custom/Pages/Profile/Profile.png";
 
     byte[] data;
 
