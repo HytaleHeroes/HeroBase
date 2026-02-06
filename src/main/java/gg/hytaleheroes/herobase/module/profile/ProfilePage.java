@@ -77,7 +77,7 @@ public class ProfilePage extends InteractiveCustomUIPage<ProfilePage.GuiData> {
         if (!didRun) {
             CompletableFuture.runAsync(() -> {
                 if (playerRef.isValid()) {
-                    var p = PlayerProfilePictureAsset.load(playerRef.getUsername());
+                    var p = PlayerProfilePictureAsset.load(playerName);
                     PlayerProfilePictureAsset.send(playerRef.getPacketHandler(), p);
 
                     if (playerRef.getWorldUuid() == null)
