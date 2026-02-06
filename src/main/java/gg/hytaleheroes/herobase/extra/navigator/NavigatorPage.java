@@ -103,7 +103,6 @@ public class NavigatorPage extends InteractiveCustomUIPage<NavigatorPage.GuiData
 
             assert player != null;
 
-            player.getPageManager().setPage(ref, store, Page.None);
             CommandManager.get().handleCommand(playerRef, data.action);
         }
     }
