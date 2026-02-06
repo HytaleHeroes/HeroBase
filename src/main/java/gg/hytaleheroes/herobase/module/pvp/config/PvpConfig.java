@@ -23,9 +23,19 @@ public class PvpConfig {
     public int keepKillsSavedHours = 24*3;
 
 
-    public PvpConfigEntry getByName(String name) {
+    public PvpConfigEntry getByWorldName(String name) {
         for (PvpConfigEntry entry : pvpConfigEntries) {
             if (entry.world.equals(name)) {
+                return entry;
+            }
+        }
+
+        return null;
+    }
+
+    public PvpConfigEntry getByMode(String id) {
+        for (PvpConfigEntry entry : pvpConfigEntries) {
+            if (entry.mode.equals(id)) {
                 return entry;
             }
         }

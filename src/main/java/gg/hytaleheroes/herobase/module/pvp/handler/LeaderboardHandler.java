@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 public class LeaderboardHandler {
     public static void onAddToWorld(AddPlayerToWorldEvent event) {
-        var conf = PvpModule.get().getConfig().getByName(event.getWorld().getName());
+        var conf = PvpModule.get().getConfig().getByWorldName(event.getWorld().getName());
         if (conf != null && conf.leaderboard) {
             var playerRef = event.getHolder().getComponent(PlayerRef.getComponentType());
             var player = event.getHolder().getComponent(Player.getComponentType());

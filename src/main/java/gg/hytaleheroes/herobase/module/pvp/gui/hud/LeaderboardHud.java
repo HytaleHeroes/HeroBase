@@ -26,7 +26,7 @@ public class LeaderboardHud extends CustomUIHud {
         if (map == null)
             return;
 
-        var configEntry = PvpModule.get().getConfig().getByName(world);
+        var configEntry = PvpModule.get().getConfig().getByWorldName(world);
         if (configEntry == null)
             return;
 

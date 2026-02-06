@@ -116,7 +116,8 @@ public class ProfilePage extends InteractiveCustomUIPage<ProfilePage.GuiData> {
                         uiCommandBuilder1.set(sel + "#Deaths.Text", "" + stats.deaths());
                     }
 
-                    uiCommandBuilder1.set(sel + "#Mode.Text", mode);
+                    var named = PvpModule.get().getConfig().getByMode(mode);
+                    uiCommandBuilder1.set(sel + "#Mode.Text", named == null ? mode : named.name);
 
                     i++;
                 }

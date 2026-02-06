@@ -33,7 +33,7 @@ public class PlayerPvpEvents extends DeathSystems.OnDeathSystem {
 
     @Override
     public void onComponentAdded(@Nonnull Ref<EntityStore> ref, @Nonnull DeathComponent deathComponent, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        var conf = PvpModule.get().getConfig().getByName(commandBuffer.getExternalData().getWorld().getName());
+        var conf = PvpModule.get().getConfig().getByWorldName(commandBuffer.getExternalData().getWorld().getName());
         if (conf == null) return;
 
         var playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
