@@ -2,28 +2,48 @@ $C = "../../Common.ui";
 
 Group #Card {
   LayoutMode: Top;
-  Padding: (Full: 2);
+  Background: $C.@InputBoxBackground;
+  Anchor: (Full: 4);
 
   Group {
-    Anchor: (Width: 130, Height: 80);
+    Anchor: (Width: 150, Height: 100);
     LayoutMode: Top;
+    Padding: (Full: 8);
 
-    Button #Button {
-      Style: $C.@DefaultButtonStyle;
+    Label #Mode {
+      Text: "Mode";
+      Padding: (Full: 4, Top: 0);
+      Style: LabelStyle(Alignment: Center, VerticalAlignment: Center, FontSize: 19);
+    }
 
-      AssetImage #Icon {
-        Anchor: (Width: 80, Height: 80);
-        FlexWeight: 2;
-        Padding: (Full: 5);
-        AssetPath: "UI/Custom/Pages/Navigator/Icons/air.png";
+    Group {
+      LayoutMode: Center;
+
+      Label {
+        FlexWeight: 1;
+        Text: "Kills:";
+        Style: LabelStyle(Alignment: Start, VerticalAlignment: Center);
+      }
+      Label #Kills {
+        FlexWeight: 1;
+        Text: "0";
+        Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
       }
     }
-    Label #Label {
-      Anchor: (Height: 20);
 
-      Padding: (Top: 20, Bottom: 20);
-      Text: "Text";
-      Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+    Group {
+      LayoutMode: Center;
+
+      Label {
+        FlexWeight: 1;
+        Text: "Deaths:";
+        Style: LabelStyle(Alignment: Start, VerticalAlignment: Center);
+      }
+      Label #Deaths {
+        FlexWeight: 1;
+        Text: "0";
+        Style: LabelStyle(Alignment: End, VerticalAlignment: Center);
+      }
     }
   }
 }

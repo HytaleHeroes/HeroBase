@@ -5,21 +5,24 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import gg.hytaleheroes.herobase.ability.AbilityModule;
-import gg.hytaleheroes.herobase.charm.system.CharmModule;
+import gg.hytaleheroes.herobase.module.ability.AbilityModule;
+import gg.hytaleheroes.herobase.module.charm.CharmModule;
 import gg.hytaleheroes.herobase.core.command.HeroBaseCommand;
 import gg.hytaleheroes.herobase.core.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.core.config.ModConfig;
 import gg.hytaleheroes.herobase.extra.action.BuilderActionSendMessage;
 import gg.hytaleheroes.herobase.extra.navigator.NavigatorCommand;
-import gg.hytaleheroes.herobase.extra.profile.PlayerProfileAsset;
-import gg.hytaleheroes.herobase.extra.profile.ProfileCommand;
-import gg.hytaleheroes.herobase.pvp.PvpModule;
-import gg.hytaleheroes.herobase.pvp.command.LeaderboardCommand;
-import gg.hytaleheroes.herobase.pvp.config.PvpConfig;
-import gg.hytaleheroes.herobase.pvp.leaderboard.DatabaseManager;
+import gg.hytaleheroes.herobase.module.profile.PlayerProfilePictureAsset;
+import gg.hytaleheroes.herobase.module.profile.ProfileCommand;
+import gg.hytaleheroes.herobase.module.profile.ProfileModule;
+import gg.hytaleheroes.herobase.module.pvp.PvpModule;
+import gg.hytaleheroes.herobase.module.pvp.command.LeaderboardCommand;
+import gg.hytaleheroes.herobase.module.pvp.config.PvpConfig;
+import gg.hytaleheroes.herobase.module.pvp.leaderboard.DatabaseManager;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HeroBase extends JavaPlugin {
     private static HeroBase INSTANCE;
@@ -28,18 +31,19 @@ public class HeroBase extends JavaPlugin {
     private final Config<ModConfig> config;
     private final Config<DatabaseConfig> dbConfig;
 
-    private final PvpModule pvpModule;
-    private final AbilityModule abilityModule;
-    private final CharmModule charmModule;
+    Set<Module<?>> modules = ConcurrentHashMap.newKeySet();
 
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
         this.config = this.withConfig("HeroBase", ModConfig.CODEC);
         this.dbConfig = this.withConfig("Database", DatabaseConfig.CODEC);
 
-        this.pvpModule = new PvpModule(this, this.withConfig("Pvp", PvpConfig.CODEC));
-        this.abilityModule = new AbilityModule(this);
-        this.charmModule = new CharmModule(this);
+        INSTANCE = this;
+
+        this.modules.add(new PvpModule(this, this.withConfig("Pvp", PvpConfig.CODEC)));
+        this.modules.add(new AbilityModule(this));
+        this.modules.add(new CharmModule(this));
+        this.modules.add(new ProfileModule(this));
     }
 
     public static HeroBase get() {
@@ -63,12 +67,10 @@ public class HeroBase extends JavaPlugin {
 
         this.databaseManager = new DatabaseManager(dbCfg);
 
-        this.abilityModule.setup(this);
-        this.pvpModule.setup(this);
-        this.charmModule.setup(this);
+        this.modules.forEach(x -> x.setup(this));
 
         this.getEventRegistry().register(PlayerDisconnectEvent.class, (event) -> {
-            PlayerProfileAsset.deleteCache(event.getPlayerRef().getUsername());
+            PlayerProfilePictureAsset.deleteCache(event.getPlayerRef().getUsername());
         });
 
         this.getCommandRegistry().registerCommand(new HeroBaseCommand());
@@ -84,18 +86,14 @@ public class HeroBase extends JavaPlugin {
     protected void start() {
         super.start();
 
-        this.abilityModule.start(this);
-        this.pvpModule.start(this);
-        this.charmModule.start(this);
+        this.modules.forEach(x -> x.start(this));
     }
 
     @Override
     protected void shutdown() {
         super.shutdown();
 
-        this.pvpModule.shutdown(this);
-        this.abilityModule.shutdown(this);
-        this.charmModule.shutdown(this);
+        this.modules.forEach(x -> x.shutdown(this));
     }
 
     public Config<ModConfig> getConfig() {
@@ -105,10 +103,7 @@ public class HeroBase extends JavaPlugin {
     public void reload() {
         this.config.load();
         this.dbConfig.load();
-
-        this.abilityModule.reload(this);
-        this.pvpModule.reload(this);
-        this.charmModule.reload(this);
+        this.modules.forEach(x -> x.reload(this));
     }
 
     static {

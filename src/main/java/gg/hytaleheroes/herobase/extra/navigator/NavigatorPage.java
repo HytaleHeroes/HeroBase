@@ -39,13 +39,13 @@ public class NavigatorPage extends InteractiveCustomUIPage<NavigatorPage.GuiData
                     new Card("Abilities", "", "UI/Custom/Pages/Navigator/Icons/lightning.png", false),
                     new Card("Profile", "profile", "UI/Custom/Pages/Navigator/Icons/user.png", false),
                     new Card("Market", "market", "UI/Custom/Pages/Navigator/Icons/pouch.png", false),
-                    new Card("Cosmetics", "cosmetic change", "UI/Custom/Pages/Navigator/Icons/armor.png", false),
+                    new Card("Cosmetics", "", "UI/Custom/Pages/Navigator/Icons/armor.png", false),
                     new Card("Settings", "", "UI/Custom/Pages/Navigator/Icons/settings.png", false)
             )),
 
             new Section("Information", List.of(
                     new Card("Help", "help", "UI/Custom/Pages/Navigator/Icons/misc.png", false),
-                    new Card("Discord", "", "UI/Custom/Pages/Navigator/Icons/chat.png", false),
+                    new Card("Discord", "discord", "UI/Custom/Pages/Navigator/Icons/chat.png", false),
                     new Card("TikTok", "", "UI/Custom/Pages/Navigator/Icons/hand-thumbs-up.png", false)
             ))
     );
