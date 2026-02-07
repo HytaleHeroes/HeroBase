@@ -2,28 +2,25 @@ $C = "../../Common.ui";
 
 Group #Card {
   LayoutMode: Top;
-  Padding: (Full: 2);
+  Padding: (Full: 3);
 
   Group {
-    Anchor: (Width: 130, Height: 80);
+    Anchor: (Width: 120);
     LayoutMode: Top;
 
     Button #Button {
       Style: $C.@DefaultButtonStyle;
+      TextTooltipStyle: (MaxWidth: 400);
 
       AssetImage #Icon {
-        Anchor: (Width: 80, Height: 80);
-        FlexWeight: 2;
-        Padding: (Full: 5);
+        Anchor: (Width: 70, Height: 70);
         AssetPath: "UI/Custom/Pages/Navigator/Icons/air.png";
       }
     }
     Label #Label {
-      Anchor: (Height: 20);
-
-      Padding: (Top: 20, Bottom: 20);
+      Padding: (Top: 5);
       Text: "Text";
-      Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
+      Style: LabelStyle(FontSize: 12, Alignment: Center, VerticalAlignment: Center);
     }
   }
 }

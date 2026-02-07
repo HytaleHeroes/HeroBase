@@ -4,7 +4,7 @@ Group {
   LayoutMode: Center;
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 720, Height: 500);
+    Anchor: (Width: 720, Height: 550);
 
     #Title {
       Label #TitleLabel {
@@ -21,10 +21,13 @@ Group {
         LayoutMode: Top;
         Padding: (Full: 10);
         Group {
+          Background: $C.@InputBoxBackground;
+          Padding: (Full: 10);
           LayoutMode: Left;
           AssetImage #ProfileImage {
             Anchor: (Width: 160, Height: 160);
             Padding: (Full: 4);
+            Background: $C.@InputBoxBackground;
             AssetPath: "UI/Custom/Pages/Profile/Profile.png";
           }
           Group {
@@ -37,18 +40,27 @@ Group {
               Padding: (Top: 9);
               FlexWeight: 3;
             }
-            Label #RankLabel {
-              Text: "Hero";
-              FlexWeight: 2;
+            Group {
+              LayoutMode: Center;
+
+              Label #RankLabel {
+                Text: "Hero";
+                FlexWeight: 2;
+                Style: LabelStyle(FontSize: 18, Alignment: Start, VerticalAlignment: Start);
+              }
+              Label #BalanceLabel {
+                Text: "Balance: 0$";
+                FlexWeight: 2;
+                Style: LabelStyle(FontSize: 18, Alignment: End, VerticalAlignment: Start);
+              }
             }
             Label {
+              Padding: (Top: 10);
               Text: "Status:";
               Style: LabelStyle(FontSize: 15, TextColor: #aaaaaa);
-              FlexWeight: 1;
             }
             Label #StatusLabel {
               Text: "What's up!";
-              FlexWeight: 2;
               Visible: false;
             }
             Group #InputGroup {
@@ -72,10 +84,12 @@ Group {
 
         Label {
           Text: "Stats:";
-          Style: LabelStyle(Alignment: Center, VerticalAlignment: Center);
-          Padding: (Full: 10);
+          Style: LabelStyle(FontSize: 20, Alignment: Start, VerticalAlignment: Center);
+          Padding: (Full: 10, Bottom: 0);
         }
         Group #Entries {
+          Background: $C.@InputBoxBackground;
+          Padding: (Full: 10);
           LayoutMode: LeftCenterWrap;
 
         }

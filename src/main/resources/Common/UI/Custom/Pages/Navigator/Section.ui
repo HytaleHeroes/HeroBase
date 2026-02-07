@@ -2,16 +2,14 @@ $C = "../../Common.ui";
 
 Group #Section {
   LayoutMode: Top;
-  Anchor: (Full: 0);
+  Anchor: (Full: 0, Bottom: 10);
 
   Label #SectionLabel {
     Style: LabelStyle(FontSize: 19, Alignment: Start, VerticalAlignment: Center);
-
   }
 
   Group {
-    Padding: (Full:10, Bottom: 30);
-
+    Padding: (Full:5);
     Background: $C.@InputBoxBackground;
 
     Group #SectionCards {

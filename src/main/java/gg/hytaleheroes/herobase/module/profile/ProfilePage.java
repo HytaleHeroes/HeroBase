@@ -1,5 +1,6 @@
 package gg.hytaleheroes.herobase.module.profile;
 
+import com.ecotale.api.EcotaleAPI;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -38,17 +39,22 @@ public class ProfilePage extends InteractiveCustomUIPage<ProfilePage.GuiData> {
         uiCommandBuilder.set("#NameLabel.Text", playerName);
         uiCommandBuilder.set("#TitleLabel.Text", "Profile of " + playerName);
 
+
         CompletableFuture.runAsync(() -> {
-
             try {
-                var p = ProfileModule.get().playerProfiles().getProfile(PvpModule.get().leaderboards().getId(playerName));
+                var pid = PvpModule.get().leaderboards().getId(playerName);
+                var bal = EcotaleAPI.getBalance(pid);
+                var profile = ProfileModule.get().playerProfiles().getProfile(PvpModule.get().leaderboards().getId(playerName));
 
-                if (p != null) {
-                    this.newStatus = p.status();
+                if (profile != null) {
+                    this.newStatus = profile.status();
 
                     UICommandBuilder b = new UICommandBuilder();
-                    b.set("#StatusLabel.Text", p.status());
-                    b.set("#StatusLabelInput.Value", p.status());
+                    b.set("#StatusLabel.Text", profile.status());
+                    b.set("#StatusLabelInput.Value", profile.status());
+
+                    b.set("#BalanceLabel.Text", String.format("Balance: %s", EcotaleAPI.format(bal)));
+
                     this.sendUpdate(b);
                 }
             } catch (SQLException _) {

@@ -15,7 +15,7 @@ configurations {
 }
 
 repositories {
-    mavenCentral();
+    mavenCentral()
     maven { url "https://maven.hytale.com/release" }
     maven { url "https://cursemaven.com" }
 
@@ -34,6 +34,9 @@ build {
 
 dependencies {
     implementation 'com.hypixel.hytale:Server:2026.01.28-87d03be09'
+
+    implementation files('libs/Ecotale-1.0.7.jar')
+    //implementation files('libs/AccessoriesPlugin-1.2.0.jar')
 
     //compileOnly("curse.maven:simpleclaims-1405415:7540330") // 1.0.25
     implementation("curse.maven:multiplehud-1423634:7530266") // 1.0.4

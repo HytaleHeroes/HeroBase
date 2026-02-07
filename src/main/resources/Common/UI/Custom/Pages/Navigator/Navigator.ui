@@ -4,7 +4,7 @@ Group {
   LayoutMode: Center;
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 740, Height: 700);
+    Anchor: (Height: 800);
 
     #Title {
       Label #TitleLabel {

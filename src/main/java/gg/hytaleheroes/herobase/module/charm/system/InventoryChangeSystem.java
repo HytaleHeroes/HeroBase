@@ -45,7 +45,5 @@ public class InventoryChangeSystem extends EntityTickingSystem<EntityStore> {
 
             });
         }
-
-        //playerComponent.getWindowManager().updateWindows();
     }
 }

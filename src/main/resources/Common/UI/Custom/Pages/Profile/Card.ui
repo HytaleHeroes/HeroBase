@@ -8,7 +8,7 @@ Group #Card {
   Group {
     Anchor: (Width: 150, Height: 100);
     LayoutMode: Top;
-    Padding: (Full: 8);
+    Padding: (Full: 5);
 
     Label #Mode {
       Text: "Mode";
@@ -18,6 +18,7 @@ Group #Card {
 
     Group {
       LayoutMode: Center;
+      Padding: (Horizontal: 5);
 
       Label {
         FlexWeight: 1;
@@ -33,6 +34,7 @@ Group #Card {
 
     Group {
       LayoutMode: Center;
+      Padding: (Horizontal: 5);
 
       Label {
         FlexWeight: 1;

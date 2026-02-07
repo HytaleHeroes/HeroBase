@@ -28,4 +28,3 @@ public class NavigatorCommand extends AbstractPlayerCommand {
         }
     }
 }
-
