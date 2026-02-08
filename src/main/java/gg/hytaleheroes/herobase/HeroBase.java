@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import gg.hytaleheroes.herobase.extra.navigator.NavigatorConfig;
 import gg.hytaleheroes.herobase.module.ability.AbilityModule;
 import gg.hytaleheroes.herobase.module.charm.CharmModule;
 import gg.hytaleheroes.herobase.core.command.HeroBaseCommand;
@@ -21,6 +22,7 @@ import gg.hytaleheroes.herobase.module.pvp.config.PvpConfig;
 import gg.hytaleheroes.herobase.module.pvp.leaderboard.DatabaseManager;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,16 +31,19 @@ public class HeroBase extends JavaPlugin {
 
     private DatabaseManager databaseManager;
     private final Config<ModConfig> config;
+    private final Config<NavigatorConfig> navigatorConfig;
     private final Config<DatabaseConfig> dbConfig;
 
     Set<Module<?>> modules = ConcurrentHashMap.newKeySet();
 
     public HeroBase(@Nonnull JavaPluginInit init) {
         super(init);
-        this.config = this.withConfig("HeroBase", ModConfig.CODEC);
-        this.dbConfig = this.withConfig("Database", DatabaseConfig.CODEC);
 
         INSTANCE = this;
+
+        this.config = this.withConfig("HeroBase", ModConfig.CODEC);
+        this.navigatorConfig = this.withConfig("Navigator", NavigatorConfig.CODEC);
+        this.dbConfig = this.withConfig("Database", DatabaseConfig.CODEC);
 
         this.modules.add(new PvpModule(this, this.withConfig("Pvp", PvpConfig.CODEC)));
         this.modules.add(new AbilityModule(this));
@@ -60,8 +65,9 @@ public class HeroBase extends JavaPlugin {
 
         INSTANCE = this;
 
-        this.config.save();
-        this.dbConfig.save();
+        for (Config<?> config1 : List.of(config, navigatorConfig, dbConfig)) {
+            config1.load().thenAccept(x -> config1.save()).join();
+        }
 
         var dbCfg = this.dbConfig.get();
 
@@ -100,9 +106,14 @@ public class HeroBase extends JavaPlugin {
         return this.config;
     }
 
+    public Config<NavigatorConfig> getNavigatorConfig() {
+        return this.navigatorConfig;
+    }
+
     public void reload() {
         this.config.load();
         this.dbConfig.load();
+        this.navigatorConfig.load();
         this.modules.forEach(x -> x.reload(this));
     }
 

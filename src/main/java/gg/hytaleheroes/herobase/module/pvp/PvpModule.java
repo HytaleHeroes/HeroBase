@@ -43,6 +43,8 @@ public class PvpModule implements Module<PvpConfig> {
         this.pvpConfig.save();
         this.leaderboards = new Leaderboards();
 
+        this.pvpConfig.load().thenAccept(x -> this.pvpConfig.save()).join();
+
         AbilitySlotHandler handler = new AbilitySlotHandler();
         this.inboundFilter = PacketAdapters.registerInbound(handler);
 

@@ -1,5 +1,6 @@
 package gg.hytaleheroes.herobase.module.charm;
 
+import com.hypixel.hytale.server.core.modules.entitystats.modifier.Modifier;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import gg.hytaleheroes.herobase.Module;
 
