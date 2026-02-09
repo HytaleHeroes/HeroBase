@@ -19,17 +19,13 @@ import gg.hytaleheroes.herobase.HeroBase;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Objects;
 
 public class NavigatorPage extends InteractiveCustomUIPage<NavigatorPage.GuiData> {
-
-
     static final class Card {
         public String name;
         public String tooltip;
         public String command;
         public String icon;
-        public boolean red;
 
         Card() {}
 
@@ -38,7 +34,6 @@ public class NavigatorPage extends InteractiveCustomUIPage<NavigatorPage.GuiData
             this.tooltip = tooltip;
             this.command = command;
             this.icon = icon;
-            this.red = red;
         }
     }
 
@@ -90,7 +85,7 @@ public class NavigatorPage extends InteractiveCustomUIPage<NavigatorPage.GuiData
 
             uiCommandBuilder.set(selector2 + "#Button.TooltipText", card.tooltip);
 
-            uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector2 + "#Button", EventData.of("Action", card.command), false);
+            uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector2 + "#Button", EventData.of("Section", String.valueOf(sectionIndex)).append("Index", String.valueOf(i)), false);
         }
     }
 
@@ -103,15 +98,20 @@ public class NavigatorPage extends InteractiveCustomUIPage<NavigatorPage.GuiData
 
             assert player != null;
 
-            CommandManager.get().handleCommand(playerRef, data.action);
+            var card = HeroBase.get().getNavigatorConfig().get().sections.get(data.section).cards.get(data.index);
+            CommandManager.get().handleCommand(playerRef, card.command);
         }
     }
 
     public static class GuiData {
         public static final BuilderCodec<GuiData> CODEC = BuilderCodec.builder(GuiData.class, GuiData::new)
                 .append(new KeyedCodec<>("Action", Codec.STRING), (d, s) -> d.action = s, d -> d.action).add()
+                .append(new KeyedCodec<>("Section", Codec.INTEGER), (d, s) -> d.section = s, d -> d.section).add()
+                .append(new KeyedCodec<>("Index", Codec.INTEGER), (d, s) -> d.index = s, d -> d.index).add()
                 .build();
 
         private String action;
+        private int section;
+        private int index;
     }
 }

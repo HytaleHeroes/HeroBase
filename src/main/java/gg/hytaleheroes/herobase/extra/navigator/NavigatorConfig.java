@@ -62,10 +62,6 @@ public class NavigatorConfig {
                             (c, v) -> c.icon = v,
                             c -> c.icon).add()
 
-                    .append(new KeyedCodec<>("Red", Codec.BOOLEAN),
-                            (c, v) -> c.red = v,
-                            c -> c.red).add()
-
                     .build();
 
     public static final BuilderCodec<NavigatorPage.Section> SECTION_CODEC =
