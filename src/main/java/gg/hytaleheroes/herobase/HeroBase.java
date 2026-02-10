@@ -1,18 +1,22 @@
 package gg.hytaleheroes.herobase;
 
+import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
+import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import gg.hytaleheroes.herobase.extra.navigator.NavigatorConfig;
-import gg.hytaleheroes.herobase.module.ability.AbilityModule;
-import gg.hytaleheroes.herobase.module.charm.CharmModule;
 import gg.hytaleheroes.herobase.core.command.HeroBaseCommand;
 import gg.hytaleheroes.herobase.core.config.DatabaseConfig;
 import gg.hytaleheroes.herobase.core.config.ModConfig;
 import gg.hytaleheroes.herobase.extra.action.BuilderActionSendMessage;
 import gg.hytaleheroes.herobase.extra.navigator.NavigatorCommand;
+import gg.hytaleheroes.herobase.extra.navigator.NavigatorConfig;
+import gg.hytaleheroes.herobase.extra.shop.ShopCommand;
+import gg.hytaleheroes.herobase.extra.shop.asset.ServerShop;
+import gg.hytaleheroes.herobase.module.ability.AbilityModule;
+import gg.hytaleheroes.herobase.module.charm.CharmModule;
 import gg.hytaleheroes.herobase.module.profile.PlayerProfilePictureAsset;
 import gg.hytaleheroes.herobase.module.profile.ProfileCommand;
 import gg.hytaleheroes.herobase.module.profile.ProfileModule;
@@ -83,6 +87,10 @@ public class HeroBase extends JavaPlugin {
 
         this.getCommandRegistry().registerCommand(new ProfileCommand());
         this.getCommandRegistry().registerCommand(new NavigatorCommand());
+
+        this.getCommandRegistry().registerCommand(new ShopCommand());
+        this.getAssetRegistry().register(HytaleAssetStore.builder(ServerShop.class, new DefaultAssetMap<>()).setPath("ServerShop").setCodec(ServerShop.CODEC).setKeyFunction(ServerShop::getId).build());
+
         this.getCommandRegistry().registerCommand(new LeaderboardCommand());
 
         NPCPlugin.get().registerCoreComponentType("SendMessage", BuilderActionSendMessage::new);

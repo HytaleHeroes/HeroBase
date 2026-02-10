@@ -35,10 +35,10 @@ build {
 dependencies {
     implementation 'com.hypixel.hytale:Server:2026.01.28-87d03be09'
 
-    implementation files('libs/Ecotale-1.0.7.jar')
+    implementation files('libs/Ecotale-1.1.0.jar')
     //implementation files('libs/AccessoriesPlugin-1.2.0.jar')
 
-    //compileOnly("curse.maven:simpleclaims-1405415:7540330") // 1.0.25
+    implementation("curse.maven:simpleclaims-1405415:7579100") // 1.0.28
     implementation("curse.maven:multiplehud-1423634:7530266") // 1.0.4
 
     shade 'com.google.guava:guava:33.4.8-jre'
@@ -79,7 +79,7 @@ idea.project.settings.runConfigurations {
     'HytaleServer'(org.jetbrains.gradle.ext.Application) {
         mainClass = 'com.hypixel.hytale.Main'
         moduleName = project.idea.module.name + '.main'
-        programParameters = "--allow-op --disable-sentry --assets=\"/Users/tomalbrecht/Library/Application Support/Hytale/install/release/package/game/latest/Assets.zip\" --mods=${file("src/main/").absolutePath} --auth-mode=authenticated"
+        programParameters = "--allow-op --assets=\"/Users/tomalbrecht/Library/Application Support/Hytale/install/release/package/game/latest/Assets.zip\" --mods=${file("src/main/").absolutePath} --auth-mode=authenticated"
         workingDirectory = serverRunDir.absolutePath
     }
 }

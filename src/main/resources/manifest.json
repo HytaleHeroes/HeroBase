@@ -9,8 +9,10 @@
     }
   ],
   "Website": "hytaleheroes.gg",
-  "ServerVersion": ">1",
+  "ServerVersion": "*",
   "Dependencies": {
+    "Buuz135:SimpleClaims": ">=1.0.28",
+    "Ecotale:Ecotale": "*",
     "Hytale:NPC": "*"
   },
   "OptionalDependencies": {},
