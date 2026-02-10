@@ -10,7 +10,14 @@ import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.server.core.modules.entitystats.modifier.StaticModifier;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.module.charm.type.CharmEffect;
+import gg.hytaleheroes.herobase.module.charm.type.EcsCharmEffect;
+
+import java.lang.reflect.Type;
 
 public class Charm implements JsonAsset<String>, JsonAssetWithMap<String, DefaultAssetMap<String, Charm>> {
     private static AssetStore<String, Charm, DefaultAssetMap<String, Charm>> ASSET_STORE;
@@ -22,47 +29,41 @@ public class Charm implements JsonAsset<String>, JsonAssetWithMap<String, Defaul
                     (config, parent) -> config.name = parent.name)
             .add()
 
-            .appendInherited(new KeyedCodec<>("StatModifiers", new ArrayCodec<>(StaticModifier.CODEC, StaticModifier[]::new)),
-                    (config, x) -> config.staticModifiers = x,
-                    (config) -> config.staticModifiers,
-                    (config, parent) -> config.staticModifiers = parent.staticModifiers)
+            .appendInherited(new KeyedCodec<>("Effects", new ArrayCodec<>(CharmEffect.CODEC, CharmEffect[]::new)),
+                    (config, x) -> config.effects = x,
+                    (config) -> config.effects,
+                    (config, parent) -> config.effects = parent.effects)
             .add()
-            .appendInherited(new KeyedCodec<>("Chance", Codec.INTEGER),
-                    (config, x) -> config.cooldown = x,
-                    (config) -> config.cooldown,
-                    (config, parent) -> config.cooldown = parent.cooldown)
-            .documentation("Chance from 0 to 100 in %")
-            .add()
-
             .build();
 
     private String id;
     private AssetExtraInfo.Data extraData;
 
     private String name;
-    private StaticModifier[] staticModifiers;
-    private int cooldown;
+    private CharmEffect[] effects;
+
+    private int chance;
 
     @Override
     public String getId() {
         return id;
     }
 
-    public int getCooldown() {
-        return cooldown;
+    public int getChance() {
+        return chance;
     }
 
-    public Charm setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public Charm setChance(int chance) {
+        this.chance = chance;
         return this;
     }
 
-    public StaticModifier[] getStaticModifiers() {
-        return staticModifiers;
+    public CharmEffect[] getEffects() {
+        return effects;
     }
 
-    public Charm setStaticModifiers(StaticModifier[] staticModifiers) {
-        this.staticModifiers = staticModifiers;
+    public Charm setEffects(CharmEffect[] effects) {
+        this.effects = effects;
         return this;
     }
 
@@ -84,5 +85,13 @@ public class Charm implements JsonAsset<String>, JsonAssetWithMap<String, Defaul
 
     public static DefaultAssetMap<String, Charm> getAssetMap() {
         return Charm.getAssetStore().getAssetMap();
+    }
+
+    public void run(Ref<EntityStore> ref, Store<EntityStore> store, CommandBuffer<EntityStore> commandBuffer, Type t, Object newComponent) {
+        for (CharmEffect effect : this.getEffects()) {
+            if (effect instanceof EcsCharmEffect ecsCharmEffect && ecsCharmEffect.type() == t) {
+                ecsCharmEffect.apply(ref, store, commandBuffer, newComponent);
+            }
+        }
     }
 }
