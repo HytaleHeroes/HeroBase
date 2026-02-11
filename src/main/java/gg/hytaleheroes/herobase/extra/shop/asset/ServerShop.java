@@ -12,7 +12,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.schema.metadata.ui.UIEditor;
 import com.hypixel.hytale.codec.schema.metadata.ui.UIRebuildCaches;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,25 +34,12 @@ public class ServerShop implements JsonAsset<String>, JsonAssetWithMap<String, D
             .metadata(new UIRebuildCaches(UIRebuildCaches.ClientCache.MODEL_TEXTURES))
             .add()
 
-            .appendInherited(new KeyedCodec<>("Cooldown", Codec.INTEGER),
-                    (config, x) -> config.cooldown = x,
-                    (config) -> config.cooldown,
-                    (config, parent) -> config.cooldown = parent.cooldown)
-            .add()
-
-            .appendInherited(new KeyedCodec<>("Interaction",  RootInteraction.CHILD_ASSET_CODEC),
-                    (config, x) -> config.interaction = x,
-                    (config) -> config.interaction,
-                    (config, parent) -> config.interaction = parent.interaction)
-            .addValidator(RootInteraction.VALIDATOR_CACHE.getValidator())
-            .add()
-
             .appendInherited(
                     new KeyedCodec<>("Sections",
                             new ArrayCodec<>(Section.CODEC, Section[]::new)),
                     (c, v) -> c.sections = List.of(v),
                     c -> c.sections.toArray(Section[]::new),
-                    (config, parent) -> config.interaction = parent.interaction)
+                    (config, parent) -> config.sections = parent.sections)
             .add()
 
             .build();
@@ -61,8 +47,6 @@ public class ServerShop implements JsonAsset<String>, JsonAssetWithMap<String, D
     private String id;
     private String name;
     private String icon;
-    private int cooldown;
-    private String interaction;
 
     public List<Section> sections = new ArrayList<>();
 
@@ -74,7 +58,6 @@ public class ServerShop implements JsonAsset<String>, JsonAssetWithMap<String, D
         this.id = id;
         this.name = name;
         this.icon = icon;
-        this.interaction = interaction;
     }
 
     public String getName() {
@@ -83,14 +66,6 @@ public class ServerShop implements JsonAsset<String>, JsonAssetWithMap<String, D
 
     public String getIcon() {
         return icon;
-    }
-
-    public Integer getCooldown() {
-        return cooldown;
-    }
-
-    public String getInteraction() {
-        return interaction;
     }
 
     @Override
@@ -110,7 +85,7 @@ public class ServerShop implements JsonAsset<String>, JsonAssetWithMap<String, D
     }
 
     static {
-        Element.CODEC.register("Item", Item.class, Item.CODEC);
-        Element.CODEC.register("Command", Command.class, Command.CODEC);
+        Element.TYPE_CODEC.register("Item", Item.class, Item.CODEC);
+        Element.TYPE_CODEC.register("Command", Command.class, Command.CODEC);
     }
 }

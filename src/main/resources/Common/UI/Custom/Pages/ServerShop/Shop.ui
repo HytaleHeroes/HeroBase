@@ -1,0 +1,36 @@
+$C = "../../Common.ui";
+
+Group {
+  LayoutMode: Center;
+
+  $C.@DecoratedContainer {
+    Anchor: (Height: 600, Width: 640);
+
+    #Title {
+      Label #TitleLabel {
+        Text: "Shop";
+        Style: (
+          ...$C.@TitleStyle,
+          HorizontalAlignment: Center,
+        );
+      }
+    }
+
+    #Content {
+      LayoutMode: TopScrolling;
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+      Group #Entries {
+        LayoutMode: Top;
+
+      }
+    }
+  }
+
+  Group #OverlayContent {
+
+    Anchor: (Left: 10, Height: 400);
+    LayoutMode: Center;
+
+  }
+}

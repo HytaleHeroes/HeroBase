@@ -1,0 +1,130 @@
+$C = "../../Common.ui";
+$Sounds = "../../Sounds.ui";
+
+@ButtonBorder = 30;
+@BP = 5;
+
+@DefaultButtonDefaultBackground = PatchStyle(TexturePath: "../../Common/Buttons/Primary_Square.png", Border: 8);
+@DefaultButtonHoveredBackground = PatchStyle(TexturePath: "../../Common/Buttons/Primary_Square_Hovered.png", Border: 8);
+@DefaultButtonPressedBackground = PatchStyle(TexturePath: "../../Common/Buttons/Primary_Square_Pressed.png", Border: 8);
+@DefaultButtonDisabledBackground = PatchStyle(TexturePath: "../../Common/Buttons/Disabled.png", Border: 8);
+
+@DefaultTextButtonStyle = TextButtonStyle(
+  Default: (Background: @DefaultButtonDefaultBackground, LabelStyle: $C.@DefaultButtonLabelStyle),
+  Hovered: (Background: @DefaultButtonHoveredBackground, LabelStyle: $C.@DefaultButtonLabelStyle),
+  Pressed: (Background: @DefaultButtonPressedBackground, LabelStyle: $C.@DefaultButtonLabelStyle),
+  Disabled: (Background: @DefaultButtonDisabledBackground, LabelStyle: $C.@DefaultButtonDisabledLabelStyle),
+  Sounds: $C.@ButtonSounds,
+);
+
+Group {
+  LayoutMode: Top;
+  $C.@DecoratedContainer {
+    #Title {
+      Label #TitleLabel {
+        Text: "Item";
+        Style: (
+          ...$C.@TitleStyle,
+          HorizontalAlignment: Center,
+        );
+      }
+    }
+    #Content {
+      LayoutMode: Top;
+
+      Group #Button {
+        TextTooltipStyle: (MaxWidth: 400);
+
+        AssetImage #Icon {
+          Anchor: (Width: 70, Height: 70);
+          AssetPath: "UI/Custom/Pages/Navigator/Icons/air.png";
+          Visible: false;
+        }
+        ItemSlotButton #PreviewOutputSlotContainer {
+          Anchor: (Width: 68, Height: 68);
+
+          Group #PreviewOutputSlotBorder {
+            Anchor: (Full: 0);
+            Background: #1a2530;
+            Padding: 2;
+
+            ItemSlot #PreviewOutputSlot {
+              Anchor: (Full: 0);
+              ShowQualityBackground: true;
+            }
+          }
+
+          Label #PreviewOutputQuantity {
+            Anchor: (Right: 8, Bottom: 5);
+            Style: (
+              FontSize: 15,
+              TextColor: #ffffff,
+              HorizontalAlignment: End,
+              VerticalAlignment: End,
+              RenderBold: true,
+            );
+          }
+        }
+      }
+
+      Group {
+        LayoutMode: Center;
+        Group {
+          LayoutMode: Left;
+          $C.@SmallTertiaryTextButton #Remove100 {
+            Anchor: (Height: 26, Horizontal: 1);
+            Padding: (Full: 6);
+            Text: "-100";
+          }
+          $C.@SmallTertiaryTextButton #Remove10 {
+            Anchor: (Height: 28, Horizontal: 1);
+            Padding: (Full: 8);
+            Text: "-10";
+          }
+          $C.@SmallTertiaryTextButton #Remove1 {
+            Anchor: (Height: 30, Horizontal: 1);
+            Padding: (Full: 10);
+            Text: "-1";
+          }
+        }
+
+        Label #Amount {
+          Text: "10.000";
+          Padding: (Full: 15);
+          Style: LabelStyle(FontSize: 19, Alignment: Center, VerticalAlignment: Center);
+        }
+
+        Group {
+          LayoutMode: Right;
+          $C.@SmallTertiaryTextButton #Add1 {
+            Anchor: (Height: 30, Horizontal: 1);
+            Padding: (Full: 10);
+            Text: "+1";
+          }
+          $C.@SmallTertiaryTextButton #Add10 {
+            Anchor: (Height: 28, Horizontal: 1);
+            Padding: (Full: 8);
+            Text: "+10";
+          }
+          $C.@SmallTertiaryTextButton #Add100 {
+            Anchor: (Height: 26, Horizontal: 1);
+            Padding: (Full: 6);
+            Text: "+100";
+          }
+        }
+      }
+
+      Label #Price {
+        Text: "Total: $ 10.000";
+        Padding: (Full: 15);
+        Style: LabelStyle(FontSize: 19, Alignment: Center, VerticalAlignment: Center);
+      }
+
+      TextButton #BuyButton {
+        Padding: (Full: 20, Horizontal: 40);
+          Text: "Purchase";
+          Style: @DefaultTextButtonStyle;
+      }
+    }
+  }
+}

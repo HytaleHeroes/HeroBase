@@ -17,10 +17,6 @@ public final class Item implements Element {
     public boolean enabled = true;
     private String itemId;
 
-    public List<Button> buttons = List.of(
-            new Button("Buy", List.of("echo hello"), false)
-    );
-
     Item() {
     }
 
@@ -30,36 +26,6 @@ public final class Item implements Element {
         this.enabled = enabled;
         this.price = price;
     }
-
-    @Override
-    public String getUIDocumentPath() {
-        return "Pages/Navigator/Card.ui";
-    }
-
-    @Override
-    public void build(String selector2, UICommandBuilder uiCommandBuilder, UIEventBuilder uiEventBuilder) {
-
-        //uiCommandBuilder.set(selector2 + "#Label.Text", this.name);
-        //uiCommandBuilder.set(selector2 + "#Icon.AssetPath", this.icon);
-
-        if (!this.enabled) uiCommandBuilder.set(selector2 + "#Button.Disabled", true);
-
-        uiCommandBuilder.set(selector2 + "#Button.TooltipText", this.tooltip);
-
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector2 + "#Button", EventData.of("Action", "BuyItem").append("Price", String.valueOf(this.price)), false);
-    }
-
-    @Override
-    public void update(String sel, UICommandBuilder uiCommandBuilder, UIEventBuilder uiEventBuilder) {
-
-    }
-
-    @Override
-    public boolean run(int amount) {
-
-        return true;
-    }
-
 
     public static final BuilderCodec<Item> CODEC =
             BuilderCodec.builder(Item.class, Item::new)

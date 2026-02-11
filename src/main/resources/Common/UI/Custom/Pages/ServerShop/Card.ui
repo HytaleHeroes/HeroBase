@@ -1,0 +1,44 @@
+$C = "../../Common.ui";
+$Sounds = "../../Sounds.ui";
+
+@ButtonBorder = 30;
+
+@DefaultButtonDefaultBackground = PatchStyle(TexturePath: "../../Common/Buttons/Primary_Square.png", Border: 8);
+@DefaultButtonHoveredBackground = PatchStyle(TexturePath: "../../Common/Buttons/Primary_Square_Hovered.png", Border: 8);
+@DefaultButtonPressedBackground = PatchStyle(TexturePath: "../../Common/Buttons/Primary_Square_Pressed.png", Border: 8);
+@DefaultButtonDisabledBackground = PatchStyle(TexturePath: "../../Common/Buttons/Disabled.png", Border: 8);
+
+@DefaultTextButtonStyle = TextButtonStyle(
+  Default: (Background: @DefaultButtonDefaultBackground, LabelStyle: $C.@DefaultButtonLabelStyle),
+  Hovered: (Background: @DefaultButtonHoveredBackground, LabelStyle: $C.@DefaultButtonLabelStyle),
+  Pressed: (Background: @DefaultButtonPressedBackground, LabelStyle: $C.@DefaultButtonLabelStyle),
+  Disabled: (Background: @DefaultButtonDisabledBackground, LabelStyle: $C.@DefaultButtonDisabledLabelStyle),
+  Sounds: $C.@ButtonSounds,
+);
+
+Group #Card {
+  LayoutMode: Top;
+  Padding: (Full: 3);
+
+  Group {
+    Background: $C.@InputBoxBackground;
+    Anchor: (Full: 4);
+    Padding: (Full: 5);
+    LayoutMode: Top;
+
+    Button #Button {
+      TextTooltipStyle: (MaxWidth: 400);
+
+      AssetImage #Icon {
+        Anchor: (Width: 70, Height: 70);
+        AssetPath: "UI/Custom/Pages/Navigator/Icons/air.png";
+      }
+    }
+  }
+
+  TextButton #Label {
+  Padding: (Full: 20, Horizontal: 40);
+    Text: "Text1";
+    Style: @DefaultTextButtonStyle;
+  }
+}

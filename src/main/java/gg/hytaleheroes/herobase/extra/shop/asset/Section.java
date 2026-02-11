@@ -31,7 +31,7 @@ public final class Section {
 
                     .append(
                             new KeyedCodec<>("Elements",
-                                    new ArrayCodec<>(Element.CODEC, Item[]::new)),
+                                    new ArrayCodec<>(Element.TYPE_CODEC, Item[]::new)),
                             (s, v) -> s.elements = List.of(v),
                             s -> s.elements.toArray(Item[]::new)
                     ).add()
