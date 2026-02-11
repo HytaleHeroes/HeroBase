@@ -14,8 +14,8 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import gg.hytaleheroes.herobase.module.charm.type.CharmEffect;
-import gg.hytaleheroes.herobase.module.charm.type.EcsCharmEffect;
+import gg.hytaleheroes.herobase.module.charm.type.api.CharmEffect;
+import gg.hytaleheroes.herobase.module.charm.type.api.EcsCharmEffect;
 
 import java.lang.reflect.Type;
 

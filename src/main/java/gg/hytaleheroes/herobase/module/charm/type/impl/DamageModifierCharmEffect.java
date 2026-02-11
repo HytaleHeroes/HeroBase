@@ -1,4 +1,4 @@
-package gg.hytaleheroes.herobase.module.charm.type;
+package gg.hytaleheroes.herobase.module.charm.type.impl;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -11,6 +11,7 @@ import com.hypixel.hytale.math.range.FloatRange;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.module.charm.type.api.DamageCharmEffect;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class DamageModifierCharmEffect implements DamageCharmEffect {
                     (config, parent) -> config.multiplier = parent.multiplier)
             .add()
 
-            .appendInherited(new KeyedCodec<>("RunOnEnemy", Codec.BOOLEAN),
+            .appendInherited(new KeyedCodec<>("RunOnEnemyAttack", Codec.BOOLEAN),
                     (config, x) -> config.runOnEnemy = x,
                     (config) -> config.runOnEnemy,
                     (config, parent) -> config.runOnEnemy = parent.runOnEnemy)

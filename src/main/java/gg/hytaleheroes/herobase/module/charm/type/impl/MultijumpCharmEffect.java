@@ -1,4 +1,4 @@
-package gg.hytaleheroes.herobase.module.charm.type;
+package gg.hytaleheroes.herobase.module.charm.type.impl;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.module.charm.type.api.EcsCharmEffect;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;

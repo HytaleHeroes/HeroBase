@@ -1,4 +1,4 @@
-package gg.hytaleheroes.herobase.module.charm.type;
+package gg.hytaleheroes.herobase.module.charm.type.api;
 
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 

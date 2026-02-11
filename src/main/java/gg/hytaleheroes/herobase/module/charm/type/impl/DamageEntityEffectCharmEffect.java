@@ -1,4 +1,4 @@
-package gg.hytaleheroes.herobase.module.charm.type;
+package gg.hytaleheroes.herobase.module.charm.type.impl;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -12,12 +12,16 @@ import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import gg.hytaleheroes.herobase.module.charm.type.api.DamageCharmEffect;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class DamageEntityEffectCharmEffect implements DamageCharmEffect {
     public static final BuilderCodec<DamageEntityEffectCharmEffect> CODEC = BuilderCodec.builder(DamageEntityEffectCharmEffect.class, DamageEntityEffectCharmEffect::new)
             .appendInherited(new KeyedCodec<>("DamageCause", Codec.STRING_ARRAY),
-                    (config, x) -> config.damageCause = x,
-                    (config) -> config.damageCause,
+                    (config, x) -> config.damageCause = Set.of(x),
+                    (config) -> config.damageCause.toArray(new String[0]),
                     (config, parent) -> config.damageCause = parent.damageCause)
             .addValidator(new ArrayValidator<>(DamageCause.VALIDATOR_CACHE.getValidator()))
             .add()
@@ -35,18 +39,28 @@ public class DamageEntityEffectCharmEffect implements DamageCharmEffect {
                     (config, parent) -> config.chance = parent.chance)
             .add()
 
-            .appendInherited(new KeyedCodec<>("RunOnEnemy", Codec.BOOLEAN),
+            .appendInherited(new KeyedCodec<>("RunOnEnemyAttack", Codec.BOOLEAN),
                     (config, x) -> config.runOnEnemy = x,
                     (config) -> config.runOnEnemy,
                     (config, parent) -> config.runOnEnemy = parent.runOnEnemy)
+            .documentation("Whether to run the entity effects when the player is hurt")
             .add()
+
+            .appendInherited(new KeyedCodec<>("ApplyToEnemy", Codec.BOOLEAN),
+                    (config, x) -> config.applyToEnemy = x,
+                    (config) -> config.applyToEnemy,
+                    (config, parent) -> config.applyToEnemy = parent.applyToEnemy)
+            .documentation("Whether apply the effect on the attacker")
+            .add()
+
 
             .build();
 
-    String[] damageCause;
+    Set<String> damageCause = new HashSet<>();
     String[] effects;
     double chance;
     boolean runOnEnemy;
+    boolean applyToEnemy;
 
     @Override
     public boolean runOnEnemy() {
@@ -61,11 +75,17 @@ public class DamageEntityEffectCharmEffect implements DamageCharmEffect {
             return;
         }
 
-        for (String effect : effects) {
-            var e = EntityEffect.getAssetMap().getAsset(effect);
-            if (e != null) {
-                var eff = commandBuffer.getComponent(ref, EffectControllerComponent.getComponentType());
-                if (eff != null) eff.addEffect(ref, e, store);
+        for (String effectId : effects) {
+            var entityEffect = EntityEffect.getAssetMap().getAsset(effectId);
+            if (entityEffect != null) {
+                EffectControllerComponent eff;
+                if (unused.getSource() instanceof Damage.EntitySource entitySource && applyToEnemy) {
+                    eff = commandBuffer.getComponent(entitySource.getRef(), EffectControllerComponent.getComponentType());
+                    if (eff != null) eff.addEffect(entitySource.getRef(), entityEffect, store);
+                }else {
+                    eff = commandBuffer.getComponent(ref, EffectControllerComponent.getComponentType());
+                    if (eff != null) eff.addEffect(ref, entityEffect, store);
+                }
             }
         }
     }

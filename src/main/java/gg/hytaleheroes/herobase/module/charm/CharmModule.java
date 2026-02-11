@@ -10,11 +10,9 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import gg.hytaleheroes.herobase.Module;
 import gg.hytaleheroes.herobase.module.charm.handler.CharmInventoryChangeHandler;
-import gg.hytaleheroes.herobase.module.charm.system.BlockBreak;
-import gg.hytaleheroes.herobase.module.charm.system.DamageSystem;
-import gg.hytaleheroes.herobase.module.charm.system.EntityDeath;
-import gg.hytaleheroes.herobase.module.charm.system.MoveInputChange;
-import gg.hytaleheroes.herobase.module.charm.type.*;
+import gg.hytaleheroes.herobase.module.charm.system.*;
+import gg.hytaleheroes.herobase.module.charm.type.api.CharmEffect;
+import gg.hytaleheroes.herobase.module.charm.type.impl.*;
 
 public class CharmModule implements Module<Void> {
     private static CharmModule INSTANCE;
@@ -47,6 +45,7 @@ public class CharmModule implements Module<Void> {
         plugin.getEntityStoreRegistry().registerSystem(new EntityDeath());
         plugin.getEntityStoreRegistry().registerSystem(new DamageSystem());
         plugin.getEntityStoreRegistry().registerSystem(new MoveInputChange());
+        plugin.getEntityStoreRegistry().registerSystem(new Ticking());
 
         plugin.getAssetRegistry().register(HytaleAssetStore.builder(Charm.class, new DefaultAssetMap<>()).setPath("Charms").setCodec(Charm.CODEC).setKeyFunction(Charm::getId).build());
 

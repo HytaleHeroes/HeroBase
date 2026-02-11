@@ -14,8 +14,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import gg.hytaleheroes.herobase.module.charm.ActiveCharmsComponent;
 import gg.hytaleheroes.herobase.module.charm.Charm;
-import gg.hytaleheroes.herobase.module.charm.type.CharmEffect;
-import gg.hytaleheroes.herobase.module.charm.type.MobLootCharmEffect;
+import gg.hytaleheroes.herobase.module.charm.type.api.CharmEffect;
+import gg.hytaleheroes.herobase.module.charm.type.impl.MobLootCharmEffect;
 
 import javax.annotation.Nonnull;
 
